@@ -1,28 +1,28 @@
-package it.security.xacml.example.database;
+package it.security.xacml.example.model;
 
-public class Utente {
+public class User {
 
+	private Integer _id;
 	private String username;
 	private String password;
-	private String nome;
-	private String ruolo;
+	private String role;
 	
-	public Utente(){
+	public User(){
+		this._id =0;
 		this.username="";
 		this.password="";
-		this.nome="";
-		this.ruolo="";
+		this.role="";
 	}
 	
-	public Utente(
+	public User(
+			Integer _id,
 			String username,
 			String password,
-			String nome,
-			String ruolo){
+			String role){
+		this._id=_id;
 		this.username = username;
 		this.password = password;
-		this.nome = nome;
-		this.ruolo = ruolo;
+		this.role = role;
 	}
 
 	public String getUsername() {
@@ -41,19 +41,19 @@ public class Utente {
 		this.password = password;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getRole() {
+		return role;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setRole(String role) {
+		this.role = role;
 	}
 
-	public String getRuolo() {
-		return ruolo;
+	public Integer get_id() {
+		return _id;
 	}
 
-	public void setRuolo(String ruolo) {
-		this.ruolo = ruolo;
+	public void set_id(Integer _id) {
+		this._id = _id;
 	}
 }
