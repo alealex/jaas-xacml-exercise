@@ -161,7 +161,6 @@ public class MyDatabase {
 		      }
 		      catch (Exception e){e.printStackTrace();}
 		   }
-
 	}
 	
 	public Student getStudent(String username) 
