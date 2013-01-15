@@ -1,11 +1,27 @@
 package it.security.xacml.example.database;
 
+import it.security.xacml.example.metadata.ProfessorMetaData;
+import it.security.xacml.example.metadata.StudentMetaData;
+import it.security.xacml.example.metadata.UserMetaData;
+import it.security.xacml.example.model.Professor;
+import it.security.xacml.example.model.Student;
+import it.security.xacml.example.model.User;
+
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ResourceBundle;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 
 
 public class MyDatabase {
@@ -39,20 +55,230 @@ public class MyDatabase {
 			return true;
 		else return false;
 	}
+
+	public int addStudent(
+			String username,
+			String name,
+			String surname,
+			String dateOfBirth,
+			String studentNumber
+			) throws SQLException,
+				InvalidKeyException,
+				NoSuchAlgorithmException,
+				NoSuchPaddingException, 
+				IllegalBlockSizeException, 
+				BadPaddingException{
+		
+		String QUERY_ADD_STUDENT = "INSERT INTO "+StudentMetaData.STUDENTS_TABLE+" "
+			+ "VALUES (?,?,?,?,?)";
+		
+		PreparedStatement stmt = null;
+		   try {
+		      stmt = getConnection().prepareStatement(QUERY_ADD_STUDENT);
+		      stmt.setString(1, cipherTextValue(username));
+		      stmt.setString(2, cipherTextValue(name));
+		      stmt.setString(3, cipherTextValue(surname));
+		      stmt.setString(4, cipherTextValue(dateOfBirth));
+		      stmt.setString(5, cipherTextValue(studentNumber));
+		      return stmt.executeUpdate();
+		   }catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		   }
+		   finally {
+		      try {
+		         if (stmt != null) { stmt.close(); }
+		      }
+		      catch (Exception e){e.printStackTrace();}
+		   }
+	}
 	
-	public String getUserRole(Utente utente) 
-			throws SQLException{
+	public int addProfessor(
+			String username,
+			String name,
+			String surname,
+			String dateOfBirth,
+			String professorNumber,
+			String subject) throws SQLException,
+				InvalidKeyException,
+				NoSuchAlgorithmException,
+				NoSuchPaddingException, 
+				IllegalBlockSizeException, 
+				BadPaddingException{
 		
-		String QUERY_USER = "SELECT "+UtenteMetaData.UTENTI_RUOLO+
-							" FROM "+UtenteMetaData.UTENTI_TABLE+
-							" WHERE "+UtenteMetaData.UTENTI_USERNAME+"='"+utente.getUsername()+
-							"' AND "+UtenteMetaData.UTENTI_PASSWORD+"='"+utente.getPassword()+"'";
+		String QUERY_ADD_PROFESSOR = "INSERT INTO "+ProfessorMetaData.PROFESSORS_TABLE+" "
+				+ "VALUES (?,?,?,?,?,?)";
 		
-		Statement stm = getConnection().createStatement();
-		ResultSet rs = stm.executeQuery(QUERY_USER);
-		if (rs.next())
-			return rs.getString(UtenteMetaData.UTENTI_RUOLO);
-		else return null;
+		PreparedStatement stmt = null;
+		   try {
+		      stmt = getConnection().prepareStatement(QUERY_ADD_PROFESSOR);
+		      stmt.setString(1, cipherTextValue(username));
+		      stmt.setString(2, cipherTextValue(name));
+		      stmt.setString(3, cipherTextValue(surname));
+		      stmt.setString(4, cipherTextValue(dateOfBirth));
+		      stmt.setString(5, cipherTextValue(professorNumber));
+		      stmt.setString(6, cipherTextValue(subject));
+		      return stmt.executeUpdate();
+		   }catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		   }
+		   finally {
+		      try {
+		         if (stmt != null) { stmt.close(); }
+		      }
+		      catch (Exception e){e.printStackTrace();}
+		   }
+	}
+		
+	public String getUserRole(User utente) 
+			throws SQLException,
+					InvalidKeyException,
+					NoSuchAlgorithmException,
+					NoSuchPaddingException, 
+					IllegalBlockSizeException, 
+					BadPaddingException{
+		
+		String QUERY_USER_ROLE = "SELECT DISTINCT"+UserMetaData.USERS_ROLE+
+							" FROM "+UserMetaData.USERS_TABLE+
+							" WHERE "+UserMetaData.USERS_USERNAME+"= ? ";
+		
+		PreparedStatement stmt = null;
+		   try {
+		      stmt = getConnection().prepareStatement(QUERY_USER_ROLE);
+		      stmt.setString(1, cipherTextValue(utente.getUsername()));
+		      ResultSet rs = stmt.executeQuery();
+		      if (rs.next())
+					return decipherTextValues(rs.getString(UserMetaData.USERS_ROLE));
+				else return null;
+		   }catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		   }
+		   finally {
+		      try {
+		         if (stmt != null) { stmt.close(); }
+		      }
+		      catch (Exception e){e.printStackTrace();}
+		   }
+
+	}
+	
+	public Student getStudent(String username) 
+			throws SQLException,
+				InvalidKeyException,
+				NoSuchAlgorithmException,
+				NoSuchPaddingException, 
+				IllegalBlockSizeException, 
+				BadPaddingException{
+		
+		String QUERY_STUDENT = null;
+		Student student = new Student();
+
+		QUERY_STUDENT = "SELECT DISTINCT *"+
+			" FROM "+UserMetaData.USERS_TABLE+
+			" WHERE "+UserMetaData.USERS_USERNAME+"='"+username+"'";
+		
+		PreparedStatement stmt = null;
+		   try {
+		      stmt = getConnection().prepareStatement(QUERY_STUDENT);
+		      stmt.setString(1, cipherTextValue(username));
+		      ResultSet rs = stmt.executeQuery();
+		      if(rs.next()){
+					student.set_id(Integer.valueOf(decipherTextValues(String.valueOf(rs.getInt(StudentMetaData.STUDENTS_ID)))));
+					student.setUsername(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_USERNAME)));
+					student.setName(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_NAME)));
+					student.setSurname(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_SURNAME)));
+					student.setStudentNumber(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_NUMBER)));
+					student.setDateOfBirth(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_DATE_OF_BIRTH)));			
+				}
+				return student;
+				
+		   }catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		   }
+		   finally {
+		      try {
+		         if (stmt != null) { stmt.close(); }
+		      }
+		      catch (Exception e){e.printStackTrace();}
+		   }
+	}
+		
+	public Professor getProfessor(String username)
+			throws SQLException,
+					InvalidKeyException,
+					NoSuchAlgorithmException,
+					NoSuchPaddingException, 
+					IllegalBlockSizeException, 
+					BadPaddingException{
+		
+		String QUERY_PROFESSOR = null;
+		Professor professor = new Professor();
+
+		QUERY_PROFESSOR = "SELECT DISTINCT *"+
+			" FROM "+ProfessorMetaData.PROFESSORS_TABLE+
+			" WHERE "+ProfessorMetaData.PROFESSORS_USERNAME+"='"+username+"'";
+		
+		PreparedStatement stmt = null;
+		   try {
+		      stmt = getConnection().prepareStatement(QUERY_PROFESSOR);
+		      stmt.setString(1, cipherTextValue(username));
+		      ResultSet rs = stmt.executeQuery();
+		      if(rs.next()){
+		    	  professor.set_id(Integer.valueOf(decipherTextValues(String.valueOf(rs.getInt(ProfessorMetaData.PROFESSORS_ID)))));
+		    	  professor.setUsername(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_USERNAME)));
+		    	  professor.setName(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_NAME)));
+		    	  professor.setSurname(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_SURNAME)));
+		    	  professor.setProfessorNumber(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_NUMBER)));
+		    	  professor.setDateOfBirth(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_DATE_OF_BIRTH)));			
+		    	  professor.setSubject(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_SUBJECT)));			
+
+		      }
+			return professor;
+				
+		   }catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		   }
+		   finally {
+		      try {
+		         if (stmt != null) { stmt.close(); }
+		      }
+		      catch (Exception e){e.printStackTrace();}
+		   }
+	}
+	
+	
+	private String cipherTextValue(String valuesToBeCrypted) 
+			throws NoSuchAlgorithmException, 
+			NoSuchPaddingException, 
+			InvalidKeyException,
+			IllegalBlockSizeException,
+			BadPaddingException{
+		Key key= new SecretKeySpec(
+				rb.getString("properties.encryptKey").getBytes(),
+				"AES");
+		
+		Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		aes.init(Cipher.ENCRYPT_MODE,key);
+		byte[] ciphertext = aes.doFinal(valuesToBeCrypted.getBytes());
+		return new String(ciphertext);
+	}
+	
+	private String decipherTextValues(String valuesToBeDecrypted)
+			throws NoSuchAlgorithmException, 
+			NoSuchPaddingException, 
+			InvalidKeyException,
+			IllegalBlockSizeException,
+			BadPaddingException{
+		Key key= new SecretKeySpec(
+				rb.getString("properties.encryptKey").getBytes(),
+				"AES");
+		Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		aes.init(Cipher.DECRYPT_MODE, key);
+		return new String(aes.doFinal(valuesToBeDecrypted.getBytes()));	
 	}
 	
 	public Connection getConnection() {
