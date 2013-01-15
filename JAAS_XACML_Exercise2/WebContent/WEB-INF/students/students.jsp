@@ -18,6 +18,6 @@ String student_number = (String) sessione.getAttribute("STUDENT_NUMBER");
 <br>
 <p> Your Student Number is: <span style="color: black;"><%=student_number %></span> </p>
 <br>
-<h3><a href="<%=request.getContextPath()%>/logout.jsp">Logout</a></h3><br>
+<h3><a href="<%=request.getContextPath()%>/public/logout.jsp">Logout</a></h3><br>
 
 </body></html>
