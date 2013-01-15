@@ -25,6 +25,6 @@ String subject = (String) sessione.getAttribute("SUBJECT");
 <p> Your professorNumber is: <span style="color: black;"><%=professorNumber %></span> </p>
 <p> Your teach the following subject: <span style="color: black;"><%=subject %></span> </p>
 <br>
-<h3><a href="<%=request.getContextPath()%>/logout.jsp">Logout</a></h3><br>
+<h3><a href="<%=request.getContextPath()%>/public/logout.jsp">Logout</a></h3><br>
 
 </body></html>
