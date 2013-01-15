@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 public class MyDatabase {
 	
 	private Connection connection;
-	private ResourceBundle rb;
+	private ResourceBundle rb; 
 	
 	public MyDatabase () throws SQLException, ClassNotFoundException{
 	
