@@ -8,8 +8,10 @@ import it.security.example.model.Student;
 import it.security.example.model.User;
 
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,6 +23,9 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 
@@ -67,7 +72,8 @@ public class MyDatabase {
 				NoSuchAlgorithmException,
 				NoSuchPaddingException, 
 				IllegalBlockSizeException, 
-				BadPaddingException{
+				BadPaddingException,
+				InvalidKeySpecException{
 		
 		String QUERY_ADD_STUDENT = "INSERT INTO "+StudentMetaData.STUDENTS_TABLE+" "
 			+ "VALUES (?,?,?,?,?)";
@@ -104,7 +110,8 @@ public class MyDatabase {
 				NoSuchAlgorithmException,
 				NoSuchPaddingException, 
 				IllegalBlockSizeException, 
-				BadPaddingException{
+				BadPaddingException,
+				InvalidKeySpecException{
 		
 		String QUERY_ADD_PROFESSOR = "INSERT INTO "+ProfessorMetaData.PROFESSORS_TABLE+" "
 				+ "VALUES (?,?,?,?,?,?)";
@@ -139,7 +146,8 @@ public class MyDatabase {
 						NoSuchAlgorithmException,
 						NoSuchPaddingException, 
 						IllegalBlockSizeException, 
-						BadPaddingException{
+						BadPaddingException,
+						InvalidKeySpecException{
 		
 		String QUERY_LOGIN_USER = "SELECT COUNT(*) AS RESULT1 FROM "+UserMetaData.USERS_TABLE+
 				" WHERE "+UserMetaData.USERS_USERNAME+"=?"+
@@ -174,7 +182,8 @@ public class MyDatabase {
 					NoSuchAlgorithmException,
 					NoSuchPaddingException, 
 					IllegalBlockSizeException, 
-					BadPaddingException{
+					BadPaddingException,
+					InvalidKeySpecException{
 		
 		String QUERY_USER_ROLE = "SELECT DISTINCT"+UserMetaData.USERS_ROLE+
 							" FROM "+UserMetaData.USERS_TABLE+
@@ -206,7 +215,8 @@ public class MyDatabase {
 				NoSuchAlgorithmException,
 				NoSuchPaddingException, 
 				IllegalBlockSizeException, 
-				BadPaddingException{
+				BadPaddingException,
+				InvalidKeySpecException{
 		
 		String QUERY_STUDENT = null;
 		Student student = new Student();
@@ -248,7 +258,8 @@ public class MyDatabase {
 					NoSuchAlgorithmException,
 					NoSuchPaddingException, 
 					IllegalBlockSizeException, 
-					BadPaddingException{
+					BadPaddingException,
+					InvalidKeySpecException{
 		
 		String QUERY_PROFESSOR = null;
 		Professor professor = new Professor();
@@ -292,13 +303,22 @@ public class MyDatabase {
 			NoSuchPaddingException, 
 			InvalidKeyException,
 			IllegalBlockSizeException,
-			BadPaddingException{
-		Key key= new SecretKeySpec(
-				rb.getString("properties.encryptKey").getBytes(),
-				"AES");
+			BadPaddingException,
+			InvalidKeySpecException{
 		
+		/* Derive the key, given password and salt. */
+		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+		KeySpec spec = new PBEKeySpec(
+				rb.getString("properties.encryptKey").toCharArray(),
+				SecureRandom.getSeed(8), 
+				65536, 
+				256);
+		SecretKey tmp = factory.generateSecret(spec);
+		SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+
+		/* Encrypt the message. */
 		Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
-		aes.init(Cipher.ENCRYPT_MODE,key);
+		aes.init(Cipher.ENCRYPT_MODE,secret);
 		byte[] ciphertext = aes.doFinal(valuesToBeCrypted.getBytes());
 		return new String(ciphertext);
 	}
@@ -308,12 +328,21 @@ public class MyDatabase {
 			NoSuchPaddingException, 
 			InvalidKeyException,
 			IllegalBlockSizeException,
-			BadPaddingException{
-		Key key= new SecretKeySpec(
-				rb.getString("properties.encryptKey").getBytes(),
-				"AES");
+			BadPaddingException,
+			InvalidKeySpecException{
+		/* Derive the key, given password and salt. */
+		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+		KeySpec spec = new PBEKeySpec(
+				rb.getString("properties.encryptKey").toCharArray(),
+				SecureRandom.getSeed(8), 
+				65536, 
+				256);
+		SecretKey tmp = factory.generateSecret(spec);
+		SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+		
+		/* Decrypt the message. */
 		Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
-		aes.init(Cipher.DECRYPT_MODE, key);
+		aes.init(Cipher.DECRYPT_MODE, secret);
 		return new String(aes.doFinal(valuesToBeDecrypted.getBytes()));	
 	}
 	
