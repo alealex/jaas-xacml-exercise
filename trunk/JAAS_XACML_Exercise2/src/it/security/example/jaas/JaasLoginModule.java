@@ -91,7 +91,6 @@ public class JaasLoginModule implements LoginModule {
 			database.createDatabaseConnection();
 			if(database.loginUser(loggedUser.getUsername(), loggedUser.getPassword())){
 				succeeded=true;
-
 				}
 			else{
 				succeeded=false;
@@ -100,8 +99,7 @@ public class JaasLoginModule implements LoginModule {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-		}
-		catch (InvalidKeyException e) {
+		} catch (InvalidKeyException e) {
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
