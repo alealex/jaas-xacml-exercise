@@ -23,7 +23,7 @@ String subject = (String) sessione.getAttribute("SUBJECT");
 <p> Your username is: <span style="color: black;"><%=username %></span> </p>
 <p> You were born in : <span style="color: black;"><%=date %></span> </p>
 <p> Your professorNumber is: <span style="color: black;"><%=professorNumber %></span> </p>
-<p> Your teach the following subject: <span style="color: black;"><%=subject %></span> </p>
+<p> You teach the following subject: <span style="color: black;"><%=subject %></span> </p>
 <br>
 <h3><a href="<%=request.getContextPath()%>/public/logout.jsp">Logout</a></h3><br>
 

@@ -6,19 +6,20 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>SDCS - Registration Page</title>
 <SCRIPT TYPE="text/javascript">
-<!--
 function dropdown(mySel){
-	var myWin, myVal;
+	var myVal;
 	myVal = mySel.options[mySel.selectedIndex].value;
-	if(myVal){
-		if(mySel.form.target)myWin = parent[mySel.form.target];
-		else myWin = window;
-		if (! myWin) return true;
-		myWin.location = myVal;
+	if(myVal == "Professor"){
+		document.getElementById('PROFESSOR_NUMBER').style.display='inline';
+		document.getElementById('SUBJECT').style.display='inline';
+		document.getElementById('STUDENT_NUMBER').style.display='none';
+	}else if(myVal == "Student"){
+		document.getElementById('PROFESSOR_NUMBER').style.display='none';
+		document.getElementById('SUBJECT').style.display='none';
+		document.getElementById('STUDENT_NUMBER').style.display='inline';
 	}
-	return false;
 }
-//-->
+
 </SCRIPT>
 
 </head>
@@ -33,8 +34,8 @@ function dropdown(mySel){
   <p style="text-align: center;"><strong>Please fill all these fields to login</strong><br>
   </p>
 
-  <p style="text-align: center;">Username:<input name="username"> <br></p>
-  <p style="text-align: center;">Password:<input name="password" type="password"><br></p>
+  <p style="text-align: center;">Username:<input name="USERNAME"> <br></p>
+  <p style="text-align: center;">Password:<input name="PASSWORD" type="password"><br></p>
   <p align="center">
 	<select ONCHANGE="showMenu(this.options[this.selectedIndex].value)" name="role">
 		<option selected>Select a Role</option>
@@ -42,18 +43,17 @@ function dropdown(mySel){
 		<option>Student</option>
 	</select>
   
-  <p style="text-align: center;">Nome:<input name="name"> <br></p>
-  <p style="text-align: center;">Cognome:<input name="surname"> <br></p>
-  <p style="text-align: center;">Data di nascita:<input name="date_of_birth"> <br></p>
-  <p style="text-align: center;">Matricola:<input name="username"> <br></p>
+  <p style="text-align: center;">Name:<input name="NAME"> <br></p>
+  <p style="text-align: center;">Surname:<input name="SURNAME"> <br></p>
+  <p style="text-align: center;">Date of birth:<input name="DATE_OF_BIRTH"> <br></p>
+  <p style="text-align: center;">PROFESSOR ID:<input name="PROFESSOR_NUMBER"> <br></p>
+  <p style="text-align: center;">STUDENT ID:<input name="STUDENT_NUMBER"> <br></p>
+  <p style="text-align: center;">Subject<input name="SUBJECT"> <br></p>
   
   <div style="text-align: center;">
-  <input name="Reset" value="Reset" type="reset">&nbsp; 
-  <input value="Login" name="Login" type="submit">
+  <input name="reset" value="Reset" type="reset">&nbsp; 
+  <input name="login" value="Submit"  type="submit">
   </div>
-  
-  <div style="text-align: center;"><input type="button" onclick="alert('Inserire nome pagina registrazione')" name="sign-up" value="Sign up" ><br>
-
   </div>
 </form>
 <br>
