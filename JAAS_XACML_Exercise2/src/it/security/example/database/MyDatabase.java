@@ -142,8 +142,8 @@ public class MyDatabase {
 						BadPaddingException{
 		
 		String QUERY_LOGIN_USER = "SELECT COUNT(*) AS RESULT1 FROM "+UserMetaData.USERS_TABLE+
-				" WHERE "+UserMetaData.USERS_USERNAME+"=? "+
-				"AND "+UserMetaData.USERS_PASSWORD+"=?";
+				" WHERE "+UserMetaData.USERS_USERNAME+"=?"+
+				" AND "+UserMetaData.USERS_PASSWORD+"=?";
 		
 		PreparedStatement stmt = null;
 		   try {
