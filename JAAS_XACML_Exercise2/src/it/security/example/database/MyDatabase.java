@@ -280,7 +280,7 @@ public class MyDatabase {
 					InvalidKeySpecException,
 					IOException{
 		
-		String QUERY_USER_ROLE = "SELECT DISTINCT"+UserMetaData.USERS_ROLE+
+		String QUERY_USER_ROLE = "SELECT DISTINCT "+UserMetaData.USERS_ROLE+
 							" FROM "+UserMetaData.USERS_TABLE+
 							" WHERE "+UserMetaData.USERS_USERNAME+"= ? ";
 		
