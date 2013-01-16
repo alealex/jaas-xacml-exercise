@@ -1,5 +1,8 @@
 package it.security.example.servlet;
 
+import it.security.example.jaas.JaasAuthentication;
+import it.security.example.metadata.UserMetaData;
+
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,7 +35,8 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+		JaasAuthentication jaasAuthentication= new JaasAuthentication(request.getParameter(UserMetaData.USERS_USERNAME), request.getParameter(UserMetaData.USERS_PASSWORD));
+		jaasAuthentication.tryLogin();
 	}
 
 }
