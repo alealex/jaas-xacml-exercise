@@ -12,12 +12,11 @@
   <p style="text-align: center;"><strong>Please fill all these fields to login</strong><br>
   </p>
 
-  <p style="text-align: center;"><small>username:</small><input name="username"> <br>
-  </p>
-  <p style="text-align: center;"><small>password:<input name="password" type="password"></small><br>
-  </p>
+  <p style="text-align: center;"><small>username:</small><input name="username"> <br>  </p>
+  <p style="text-align: center;"><small>password:<input name="password" type="password"></small><br>  </p>
   
-  <div style="text-align: center;"><input name="Reset" value="Reset" type="reset">&nbsp; 
+  <div style="text-align: center;">
+  <input name="Reset" value="Reset" type="reset">&nbsp; 
   <input value="Login" name="Login" type="submit">
   </div>
   
