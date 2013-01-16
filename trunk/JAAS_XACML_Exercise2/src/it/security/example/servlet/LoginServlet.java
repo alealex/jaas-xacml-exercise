@@ -1,4 +1,4 @@
-package it.security.xacml.example.servlet;
+package it.security.example.servlet;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

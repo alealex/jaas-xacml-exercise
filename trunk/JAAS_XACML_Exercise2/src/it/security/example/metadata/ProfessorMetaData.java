@@ -1,4 +1,4 @@
-package it.security.xacml.example.metadata;
+package it.security.example.metadata;
 
 public class ProfessorMetaData {
 	public static final String PROFESSORS_TABLE = "PROFESSORS";

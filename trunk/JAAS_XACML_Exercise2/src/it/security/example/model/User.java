@@ -1,4 +1,4 @@
-package it.security.xacml.example.model;
+package it.security.example.model;
 
 public class User {
 
