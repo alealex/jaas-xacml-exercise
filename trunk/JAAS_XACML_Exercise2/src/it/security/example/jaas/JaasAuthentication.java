@@ -8,14 +8,18 @@ public class JaasAuthentication {
 	
 	private String username;
 	private String password;
+
 	// PAKO
-//	private String CONFIG_PATH="/Users/pasqualederosa/Documents/workspaceSDCS/";
+
+	private String CONFIG_PATH="/Users/pasqualederosa/Documents/workspaceSDCS/";
+
 	
 	// MARIO
-	private String CONFIG_PATH="/Users/pasqualederosa/Documents/workspace-security/";
+//	private String CONFIG_PATH="/Users/pasqualederosa/Documents/workspace-security/";
 	
 	//GIANCARLO
 //	private String CONFIG_PATH="/home/giancarlo/Scrivania/Cioppy/Università/Magistrale/Applicazioni Telematiche/workspace2/";
+
 
 	public JaasAuthentication(String username, String password){
 		this.username=username;

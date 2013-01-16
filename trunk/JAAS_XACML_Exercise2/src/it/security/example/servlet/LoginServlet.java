@@ -75,6 +75,7 @@ public class LoginServlet extends HttpServlet {
 					session.setAttribute(ProfessorMetaData.PROFESSORS_DATE_OF_BIRTH, professor.getDate_Of_Birth());
 					session.setAttribute(ProfessorMetaData.PROFESSORS_NUMBER, professor.getProfessor_Number());
 					session.setAttribute(ProfessorMetaData.PROFESSORS_SUBJECT, professor.getSubject());
+					session.setAttribute(UserMetaData.USERS_ROLE, RoleMetaData.ISPROFESSOR);					
 					response.sendRedirect(response.encodeRedirectUrl("/JAAS_XACML_Exercise2/professors/professors.jsp"));
 				}
 				else if(database.getUserRole(loggedUser).toLowerCase().equals(RoleMetaData.ISSTUDENT)){
@@ -87,6 +88,7 @@ public class LoginServlet extends HttpServlet {
 					session.setAttribute(StudentMetaData.STUDENTS_SURNAME, student.getSurname());
 					session.setAttribute(StudentMetaData.STUDENTS_NUMBER, student.getStudent_Number());
 					session.setAttribute(StudentMetaData.STUDENTS_DATE_OF_BIRTH, student.getDate_Of_Birth());			
+					session.setAttribute(UserMetaData.USERS_ROLE, RoleMetaData.ISSTUDENT);					
 					response.sendRedirect(response.encodeRedirectUrl("/JAAS_XACML_Exercise2/students/students.jsp"));
 				}
 			} catch (InvalidKeyException e) {
