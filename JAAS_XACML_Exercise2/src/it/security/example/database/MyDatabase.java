@@ -1,11 +1,11 @@
-package it.security.xacml.example.database;
+package it.security.example.database;
 
-import it.security.xacml.example.metadata.ProfessorMetaData;
-import it.security.xacml.example.metadata.StudentMetaData;
-import it.security.xacml.example.metadata.UserMetaData;
-import it.security.xacml.example.model.Professor;
-import it.security.xacml.example.model.Student;
-import it.security.xacml.example.model.User;
+import it.security.example.metadata.ProfessorMetaData;
+import it.security.example.metadata.StudentMetaData;
+import it.security.example.metadata.UserMetaData;
+import it.security.example.model.Professor;
+import it.security.example.model.Student;
+import it.security.example.model.User;
 
 import java.security.InvalidKeyException;
 import java.security.Key;
