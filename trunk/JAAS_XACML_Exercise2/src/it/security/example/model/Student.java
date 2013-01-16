@@ -5,16 +5,16 @@ public class Student {
 	private String username;
 	private String name;
 	private String surname;
-	private String dateOfBirth;
-	private String studentNumber;
+	private String date_of_birth;
+	private String student_number;
 	
 	public Student(){
 		this._id=-1;
 		this.username="";
 		this.name="";
 		this.surname="";
-		this.dateOfBirth="";
-		this.studentNumber="";
+		this.date_of_birth="";
+		this.student_number="";
 	}
 	
 	public Student(
@@ -28,8 +28,8 @@ public class Student {
 		this.username=username;
 		this.name=name;
 		this.surname=surname;
-		this.dateOfBirth=dateOfBirth;
-		this.studentNumber=studentNumber;
+		this.date_of_birth=dateOfBirth;
+		this.student_number=studentNumber;
 	}
 
 	public Integer get_id() {
@@ -64,19 +64,19 @@ public class Student {
 		this.surname = surname;
 	}
 
-	public String getDateOfBirth() {
-		return dateOfBirth;
+	public String getDate_Of_Birth() {
+		return date_of_birth;
 	}
 
-	public void setDateOfBirth(String dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
+	public void setDate_Of_Birth(String dateOfBirth) {
+		this.date_of_birth = dateOfBirth;
 	}
 
-	public String getStudentNumber() {
-		return studentNumber;
+	public String getStudent_Number() {
+		return student_number;
 	}
 
-	public void setStudentNumber(String studentNumber) {
-		this.studentNumber = studentNumber;
+	public void setStudent_Number(String studentNumber) {
+		this.student_number = studentNumber;
 	}
 }

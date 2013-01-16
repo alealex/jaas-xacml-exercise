@@ -60,6 +60,42 @@ public class MyDatabase {
 			return true;
 		else return false;
 	}
+	
+	public int addUser(
+			String username,
+			String password,
+			String role)throws SQLException,
+					InvalidKeyException,
+					NoSuchAlgorithmException,
+					NoSuchPaddingException, 
+					IllegalBlockSizeException, 
+					BadPaddingException,
+					InvalidKeySpecException{
+		
+		String QUERY_ADD_USER = "INSERT INTO "+UserMetaData.USERS_TABLE+" "
+				+"("+UserMetaData.USERS_USERNAME+","
+				+UserMetaData.USERS_PASSWORD+","
+				+UserMetaData.USERS_ROLE+")"
+				+ "VALUES (?,?,?)";
+		
+		PreparedStatement stmt = null;
+		   try {
+		      stmt = getConnection().prepareStatement(QUERY_ADD_USER);
+		      stmt.setString(1, cipherTextValue(username));
+		      stmt.setString(2, cipherTextValue(password));
+		      stmt.setString(3, cipherTextValue(role));
+		      return stmt.executeUpdate();
+		   }catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		   }
+		   finally {
+		      try {
+		         if (stmt != null) { stmt.close(); }
+		      }
+		      catch (Exception e){e.printStackTrace();}
+		   }
+	}
 
 	public int addStudent(
 			String username,
@@ -76,7 +112,12 @@ public class MyDatabase {
 				InvalidKeySpecException{
 		
 		String QUERY_ADD_STUDENT = "INSERT INTO "+StudentMetaData.STUDENTS_TABLE+" "
-			+ "VALUES (?,?,?,?,?)";
+			+"("+StudentMetaData.STUDENTS_USERNAME+","
+				+StudentMetaData.STUDENTS_NAME+","
+				+StudentMetaData.STUDENTS_SURNAME+","
+				+StudentMetaData.STUDENTS_DATE_OF_BIRTH+","
+				+StudentMetaData.STUDENTS_NUMBER+")"
+				+ "VALUES (?,?,?,?,?)";
 		
 		PreparedStatement stmt = null;
 		   try {
@@ -114,6 +155,12 @@ public class MyDatabase {
 				InvalidKeySpecException{
 		
 		String QUERY_ADD_PROFESSOR = "INSERT INTO "+ProfessorMetaData.PROFESSORS_TABLE+" "
+				+"("+ProfessorMetaData.PROFESSORS_USERNAME+","
+				+ProfessorMetaData.PROFESSORS_NAME+","
+				+ProfessorMetaData.PROFESSORS_SURNAME+","
+				+ProfessorMetaData.PROFESSORS_DATE_OF_BIRTH+","
+				+ProfessorMetaData.PROFESSORS_NUMBER+","
+				+ProfessorMetaData.PROFESSORS_SUBJECT+","+")"
 				+ "VALUES (?,?,?,?,?,?)";
 		
 		PreparedStatement stmt = null;
@@ -235,8 +282,8 @@ public class MyDatabase {
 					student.setUsername(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_USERNAME)));
 					student.setName(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_NAME)));
 					student.setSurname(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_SURNAME)));
-					student.setStudentNumber(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_NUMBER)));
-					student.setDateOfBirth(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_DATE_OF_BIRTH)));			
+					student.setStudent_Number(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_NUMBER)));
+					student.setDate_Of_Birth(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_DATE_OF_BIRTH)));			
 				}
 				return student;
 				
@@ -278,8 +325,8 @@ public class MyDatabase {
 		    	  professor.setUsername(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_USERNAME)));
 		    	  professor.setName(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_NAME)));
 		    	  professor.setSurname(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_SURNAME)));
-		    	  professor.setProfessorNumber(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_NUMBER)));
-		    	  professor.setDateOfBirth(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_DATE_OF_BIRTH)));			
+		    	  professor.setProfessor_Number(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_NUMBER)));
+		    	  professor.setDate_Of_Birth(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_DATE_OF_BIRTH)));			
 		    	  professor.setSubject(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_SUBJECT)));			
 
 		      }
