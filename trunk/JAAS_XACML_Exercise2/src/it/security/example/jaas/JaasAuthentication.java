@@ -8,9 +8,9 @@ public class JaasAuthentication {
 	
 	private String username;
 	private String password;
-	private String CONFIG_PATH="/Users/pasqualederosa/Documents/workspaceSDCS/";
 //	private String CONFIG_PATH="/Users/pasqualederosa/Documents/workspaceSDCS/";
-//	private String CONFIG_PATH="/home/giancarlo/Scrivania/Cioppy/Università/Magistrale/Applicazioni Telematiche/workspace2/";
+//	private String CONFIG_PATH="/Users/pasqualederosa/Documents/workspaceSDCS/";
+	private String CONFIG_PATH="/home/giancarlo/Scrivania/Cioppy/Università/Magistrale/Applicazioni Telematiche/workspace2/";
 
 	public JaasAuthentication(String username, String password){
 		this.username=username;
