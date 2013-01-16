@@ -12,7 +12,7 @@
 		
 		if(mySel == "Professor"){
 			var injectProfessorHTML = "<p style=\"text-align: left;\">Professor ID:<input name=\"PROFESSOR_NUMBER\"> <br></p>"+
-			  "<p style=\"text-align: left;\">Subject"+
+			  "<p style=\"text-align: left;\">Subject: "+
 			 	"<select name=\"SUBJECT\">"+
 				"<option selected>SDCS</option>"+
 				"<option>SE</option>"+
@@ -28,12 +28,11 @@
 			document.getElementById('id_student').innerHTML = injectStudentHTML;
 		}
 	}
-	}
 </script>
 </head>
 <body>
 
-<form style="height: 83px;" method="POST" action="http://localhost:8080/JAAS_XACML_EXERCISE2/RegistrationServlet" name="registration">
+<form style="height: 83px;" method="POST" action="http://localhost:8080/JAAS_XACML_Exercise2/RegistrationServlet" name="registration">
   <div style="text-align: center;">
   </div>
 <p style="text-align: center;"><strong><img style="width: 484px; height: 75px;" alt="TeamAndroid" 
@@ -45,8 +44,9 @@
   <p style="text-align: left;">Username:<input name="USERNAME"> <br></p>
   <p style="text-align: left;">Password:<input name="PASSWORD" type="password"><br></p>
   <p align="left">Select a Role:
-	<select onchange="innerSelection(this.value)" name="role" >
-		<option selected>Professor</option>
+	<select onchange="innerSelection(this.value)" name="ROLE" >
+		<option selected>Seleziona un ruolo...</option>
+		<option>Professor</option>
 		<option>Student</option>
 	</select></p>
 	

@@ -6,8 +6,8 @@ public class Professor {
 	private String username;
 	private String name;
 	private String surname;
-	private String dateOfBirth;
-	private String professorNumber;
+	private String date_of_birth;
+	private String professor_number;
 	private String subject;
 	
 	public Professor(){
@@ -15,8 +15,8 @@ public class Professor {
 		this.username="";
 		this.name="";
 		this.surname="";
-		this.dateOfBirth="";
-		this.professorNumber="";
+		this.date_of_birth="";
+		this.professor_number="";
 		this.subject="";
 	}
 	
@@ -32,8 +32,8 @@ public class Professor {
 		this.username=username;
 		this.name=name;
 		this.surname=surname;
-		this.dateOfBirth=dateOfBirth;
-		this.professorNumber=professorNumber;
+		this.date_of_birth=dateOfBirth;
+		this.professor_number=professorNumber;
 		this.subject=subject;
 	}
 
@@ -69,20 +69,20 @@ public class Professor {
 		this.surname = surname;
 	}
 
-	public String getDateOfBirth() {
-		return dateOfBirth;
+	public String getDate_Of_Birth() {
+		return date_of_birth;
 	}
 
-	public void setDateOfBirth(String dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
+	public void setDate_Of_Birth(String date_Of_Birth) {
+		this.date_of_birth = date_Of_Birth;
 	}
 
-	public String getProfessorNumber() {
-		return professorNumber;
+	public String getProfessor_Number() {
+		return professor_number;
 	}
 
-	public void setProfessorNumber(String professorNumber) {
-		this.professorNumber = professorNumber;
+	public void setProfessor_Number(String professor_number) {
+		this.professor_number = professor_number;
 	}
 
 	public String getSubject() {
