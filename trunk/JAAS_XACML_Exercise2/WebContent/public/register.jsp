@@ -7,6 +7,77 @@
 <title>SDCS - Registration Page</title>
 
 <script> 
+
+	//Crea una nuova richiesta
+	function newXMLHttpRequest() {
+		var request = null;
+		var browser = navigator.userAgent.toUpperCase();
+		if(typeof(XMLHttpRequest) === "function" || typeof(XMLHttpRequest) === "object") {
+			request = new XMLHttpRequest();
+		} else if(window.ActiveXObject && browserUtente.indexOf("MSIE 4") < 0) {
+			if(browser.indexOf("MSIE 5") < 0) {
+				request = new ActiveXObject("Msxml2.XMLHTTP");
+			} else {
+				request = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+		}
+		return request;
+	}
+	
+	// Callback: è stata editata la casella di testo
+	function checkUsername() {
+		var username = document.getElementById("USERNAME");
+		if (username.value == "") {
+			rimuoviUsername();
+		} else {
+			var req = newXMLHttpRequest();
+			req.onreadystatechange = function() {
+				if (req.readyState == 4) {
+					if (req.status == 200) {
+						gestisciRisposta(req.responseXML);
+					} else if (req.status == 204){
+						rimuoviUsername();
+					}
+				}
+			};
+			req.open("POST", "http://localhost:8080/JAAS_XACML_Exercise2/CheckUsernameServlet", true);
+			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+			var params = "USERNAME=" + escape(username.value);
+			req.send(params);
+		}
+	}
+	
+	// Gestisci la risposta dal server
+	function gestisciRisposta(responseXML) {
+		rimuoviUsername();
+		if(responseXML.getElementsByTagName("username").length > 0) {
+			var risposta = responseXML.getElementsByTagName("risposta")[0];
+			if (risposta.childNodes.length > 0) {
+				var check = risposta.childNodes[0].childNodes[0].nodeValue;
+				document.getElementById('check_username').innerHTML= check;
+				
+				if(check == "false"){
+					document.getElementById('check_username').innerHTML= "This is a valid username";
+					document.getElementById('check_username').setAttribute("style", "color:green");
+				}else{
+					document.getElementById('check_username').innerHTML= "This username is already used";
+					document.getElementById('check_username').setAttribute("style", "color:red");
+				}
+			}
+		}
+	}
+	
+	// Nessun suggerimento
+	function rimuoviUsername() {
+		var result= document.getElementById('check_username')
+		var username = document.getElementById("USERNAME");
+		while(username.hasChildNodes()) {
+			username.removeChild(username.firstChild);
+		}
+		while(result.hasChildNodes()) {
+			result.removeChild(result.firstChild);
+		}
+	}
 	
 	function innerSelection(mySel){
 		
@@ -41,7 +112,8 @@
   <p style="text-align: center;"><strong>Please fill all these fields to login</strong><br>
   </p>
 
-  <p style="text-align: left;">Username:<input name="USERNAME"> <br></p>
+  <p style="text-align: left;">Username:<input id="USERNAME" name="USERNAME" type="text" onkeyup="checkUsername();"> 
+  <div id="check_username"></div></p>
   <p style="text-align: left;">Password:<input name="PASSWORD" type="password"><br></p>
   <p align="left">Select a Role:
 	<select onchange="innerSelection(this.value)" name="ROLE" >
