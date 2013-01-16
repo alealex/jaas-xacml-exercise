@@ -79,7 +79,7 @@ public class RequestBuilder
         // the resource being requested : è una URI ma passata come stringa
         StringAttribute value =
             new StringAttribute("http://localhost:8080"+request.getRequestURI());
-       
+       System.out.println("http://localhost:8080"+request.getRequestURI());
         // create the resource using a standard, required identifier for
         // the resource being requested
         resource.add(new Attribute(new URI(EvaluationCtx.RESOURCE_ID),

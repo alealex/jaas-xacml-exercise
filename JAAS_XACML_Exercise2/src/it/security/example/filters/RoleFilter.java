@@ -72,12 +72,13 @@ public class RoleFilter implements Filter {
 	        
 	        for(int i=0;i<listaFile.length;i++)
 	        {
-	             //File f = new File(PATH_POLICY);
 	             f=listaFile[i];
+	             if(!f.getAbsolutePath().contains(".DS") && !f.getAbsolutePath().contains(".svn")){
 	             policyfile = f.getAbsolutePath();
 	             policyModule.addPolicy(policyfile); //aggiunge solo il nome del file
 	             policyModules.add(policyModule);
 	             policyFinder.setModules(policyModules);
+	             }
 	        }
 	
 	        CurrentEnvModule envModule = new CurrentEnvModule();
@@ -107,9 +108,9 @@ public class RoleFilter implements Filter {
 	        if (dec == 0) {//permit
 	            chain.doFilter(request, response);
 	        } else if (dec == 1) {//deny
-	            res.sendRedirect(req.getContextPath()+"/AccessDenied.jsp");
-	        } else if (dec == 2||dec==3) {//not applicable o indeterminate
-	            res.sendRedirect(req.getContextPath()+"/errore.jsp"); 
+	            res.sendRedirect(req.getContextPath()+"/public/AccessDenied.jsp");
+	        } else if (dec == 2||dec==3) {//indeterminate o not applicable
+	            res.sendRedirect(req.getContextPath()+"/public/error.jsp"); 
 	        }            }
 	     catch (Exception ex) {
 	        ex.printStackTrace();
@@ -119,7 +120,7 @@ public class RoleFilter implements Filter {
         //pagina, e in tal caso entra in gioco il security constraint definito in web.xml, per cui
         //devo comunque autenticarmi prima
         else
-        	res.sendRedirect(req.getContextPath()+"/login.jsp");
+        	res.sendRedirect(req.getContextPath()+"/public/login.jsp");
 	}
 
 	/**

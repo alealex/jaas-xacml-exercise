@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PolicySet xmlns="urn:oasis:names:tc:xacml:1.0:policy" PolicyCombiningAlgId="urn:oasis:names:tc:xacml:1.0:policy-combining-algorithm:permit-overrides" PolicySetId="RolePolicies">
+  <Description>Set of Policies useful to grant access control to system resources</Description>
+  <Target>
+    <Subjects>
+      <AnySubject />
+    </Subjects>
+    <Resources>
+      <AnyResource />
+    </Resources>
+    <Actions>
+      <AnyAction />
+    </Actions>
+  </Target>
+  <Policy xmlns="urn:oasis:names:tc:xacml:1.0:policy" PolicyId="ProfessorsPolicy" RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:permit-overrides">
+    <Description>Set of rules referred to Professor role</Description>
+    <Target>
+      <Subjects>
+        <AnySubject />
+      </Subjects>
+      <Resources>
+        <Resource>
+          <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:regexp-string-match">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">http://localhost:8080/JAAS_XACML_Exercise2/professors/.*</AttributeValue>
+            <ResourceAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id" DataType="http://www.w3.org/2001/XMLSchema#string" />
+          </ResourceMatch>
+        </Resource>
+      </Resources>
+      <Actions>
+        <AnyAction> </AnyAction>
+      </Actions>
+    </Target>
+    <Rule Effect="Permit" RuleId="PermitProfessor">
+      <Target>
+        <Subjects>
+          <Subject>
+            <SubjectMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+              <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">professor</AttributeValue>
+              <SubjectAttributeDesignator AttributeId="ROLE" DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="true" />
+            </SubjectMatch>
+          </Subject>
+        </Subjects>
+        <Resources>
+          <AnyResource />
+        </Resources>
+        <Actions>
+          <AnyAction />
+        </Actions>
+      </Target>
+    </Rule>
+    <Rule Effect="Deny" RuleId="DenyOtherRoles" />
+  </Policy>
+    <Policy xmlns="urn:oasis:names:tc:xacml:1.0:policy" PolicyId="StudentPolicy" RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:permit-overrides">
+    <Description>Set of rules referred to Student role</Description>
+    <Target>
+      <Subjects>
+        <AnySubject />
+      </Subjects>
+      <Resources>
+        <Resource>
+          <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:regexp-string-match">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">http://localhost:8080/JAAS_XACML_Exercise2/students/.*</AttributeValue>
+            <ResourceAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id" DataType="http://www.w3.org/2001/XMLSchema#string" />
+          </ResourceMatch>
+        </Resource>
+      </Resources>
+      <Actions>
+        <AnyAction> </AnyAction>
+      </Actions>
+    </Target>
+    <Rule Effect="Permit" RuleId="PermitStudent">
+      <Target>
+        <Subjects>
+          <Subject>
+            <SubjectMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+              <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">student</AttributeValue>
+              <SubjectAttributeDesignator AttributeId="ROLE" DataType="http://www.w3.org/2001/XMLSchema#string" MustBePresent="true" />
+            </SubjectMatch>
+          </Subject>
+        </Subjects>
+        <Resources>
+          <AnyResource />
+        </Resources>
+        <Actions>
+          <AnyAction />
+        </Actions>
+      </Target>
+    </Rule>
+    <Rule Effect="Deny" RuleId="DenyOtherRoles" />
+  </Policy>
+  
+</PolicySet>
+
