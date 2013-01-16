@@ -7,7 +7,7 @@
 	sessione.removeAttribute("error");
 	sessione.invalidate();
    %>
-<jsp:forward page="/index.jsp"></jsp:forward>
+<jsp:forward page="/public/login.jsp"></jsp:forward>
 
 </body>
 </html>
