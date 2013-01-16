@@ -78,115 +78,105 @@ public class RegistrationServlet extends HttpServlet {
 			database.createDatabaseConnection();
 			
 			/*
-			 * Verifico che l'utente sia presente gia' in DB:
+			 * La username inserita non e' presente in DB 
+			 * procedo con la registrazione:
+			 * Procedo creando comunque l'oggetto USER:
 			 */
 			
-			if (database.checkUsername(request.getParameter("USERNAME"))) return false;
-			else{
+			/* Setto l'oggetto User */
+			User user = new User();
+			Method[] userMethods = User.class.getMethods() ;
+			for(Method metodo : userMethods) {			
+				if(metodo.getName().startsWith("set"))
+					try {
+
+						System.out.println(metodo.getName().substring(3, 4).toLowerCase()+
+								metodo.getName().substring(4)+": "+request.getParameter(			
+										metodo.getName().substring(3).toUpperCase())
+								);
+						
+						metodo.invoke(user, new Object[] { request.getParameter(			
+								metodo.getName().substring(3).toUpperCase())
+								});
+					} catch(Exception e) { 
+						e.printStackTrace(); 
+					}
+			}
 			
-				/*
-				 * La username inserita non e' presente in DB 
-				 * procedo con la registrazione:
-				 * Procedo creando comunque l'oggetto USER:
-				 */
+			if (request.getParameter("ROLE").equalsIgnoreCase(RoleMetaData.ISSTUDENT)){
 				
-				/* Setto l'oggetto User */
-				User user = new User();
-				Method[] userMethods = User.class.getMethods() ;
-				for(Method metodo : userMethods) {			
+				/* Setto l'oggetto studente */
+				Student student = new Student();
+				Method[] studentMethods = Student.class.getMethods() ;
+				for(Method metodo : studentMethods) {			
 					if(metodo.getName().startsWith("set"))
 						try {
-	
+
 							System.out.println(metodo.getName().substring(3, 4).toLowerCase()+
 									metodo.getName().substring(4)+": "+request.getParameter(			
-											metodo.getName().substring(3).toUpperCase())
-									);
+											metodo.getName().substring(3).toUpperCase()));
 							
-							metodo.invoke(user, new Object[] { request.getParameter(			
-									metodo.getName().substring(3).toUpperCase())
-									});
+							metodo.invoke(student, new Object[] { request.getParameter(			
+									metodo.getName().substring(3).toUpperCase())});
 						} catch(Exception e) { 
 							e.printStackTrace(); 
 						}
-				}
 				
-				if (request.getParameter("ROLE").equalsIgnoreCase(RoleMetaData.ISSTUDENT)){
+				}	
 					
-					/* Setto l'oggetto studente */
-					Student student = new Student();
-					Method[] studentMethods = Student.class.getMethods() ;
-					for(Method metodo : studentMethods) {			
-						if(metodo.getName().startsWith("set"))
-							try {
-	
-								System.out.println(metodo.getName().substring(3, 4).toLowerCase()+
-										metodo.getName().substring(4)+": "+request.getParameter(			
-												metodo.getName().substring(3).toUpperCase()));
-								
-								metodo.invoke(student, new Object[] { request.getParameter(			
-										metodo.getName().substring(3).toUpperCase())});
-							} catch(Exception e) { 
-								e.printStackTrace(); 
-							}
-					
-					}
-					
-						
-						database.addUser(
-							user.getUsername(),
-							user.getPassword(), 
-							user.getRole());
-					
-						database.addStudent(
-								student.getUsername(),
-								student.getName(), 
-								student.getSurname(),
-								student.getDate_Of_Birth(), 
-								student.getStudent_Number());
-						
-						database.closeDatabaseConnection();
-						return true;
-						
-				}else if(request.getParameter("ROLE").equalsIgnoreCase(RoleMetaData.ISPROFESSOR)){
-					
-					/* Setto l'oggetto professore */
-					Professor professor = new Professor();
-					Method[] professorMethods = Professor.class.getMethods() ;
-					for(Method metodo : professorMethods) {			
-						if(metodo.getName().startsWith("set"))
-							try {
-	
-								System.out.println(metodo.getName().substring(3, 4).toLowerCase()+
-										metodo.getName().substring(4)+": "+request.getParameter(
-												metodo.getName().substring(3).toUpperCase()));
-								
-								metodo.invoke(professor, new Object[] { request.getParameter(			
-										metodo.getName().substring(3).toUpperCase())});
-							} catch(Exception e) { 
-								e.printStackTrace(); 
-							}
-						}
-					
-						database.addUser(
-							user.getUsername(),
-							user.getPassword(), 
-							user.getRole());
+					database.addUser(
+						user.getUsername(),
+						user.getPassword(), 
+						user.getRole());
 				
-					database.addProfessor(
-							professor.getUsername(),
-							professor.getName(),
-							professor.getSurname(),
-							professor.getDate_Of_Birth(),
-							professor.getProfessor_Number(), 
-							professor.getSubject());
+					database.addStudent(
+							student.getUsername(),
+							student.getName(), 
+							student.getSurname(),
+							student.getDate_Of_Birth(), 
+							student.getStudent_Number());
+					
 					database.closeDatabaseConnection();
 					return true;
-				}else{
-					database.closeDatabaseConnection();
-					return false;
-				}
+					
+			}else if(request.getParameter("ROLE").equalsIgnoreCase(RoleMetaData.ISPROFESSOR)){
+				
+				/* Setto l'oggetto professore */
+				Professor professor = new Professor();
+				Method[] professorMethods = Professor.class.getMethods() ;
+				for(Method metodo : professorMethods) {			
+					if(metodo.getName().startsWith("set"))
+						try {
+
+							System.out.println(metodo.getName().substring(3, 4).toLowerCase()+
+									metodo.getName().substring(4)+": "+request.getParameter(
+											metodo.getName().substring(3).toUpperCase()));
+							
+							metodo.invoke(professor, new Object[] { request.getParameter(			
+									metodo.getName().substring(3).toUpperCase())});
+						} catch(Exception e) { 
+							e.printStackTrace(); 
+						}
+					}
+				
+					database.addUser(
+						user.getUsername(),
+						user.getPassword(), 
+						user.getRole());
+			
+				database.addProfessor(
+						professor.getUsername(),
+						professor.getName(),
+						professor.getSurname(),
+						professor.getDate_Of_Birth(),
+						professor.getProfessor_Number(), 
+						professor.getSubject());
+				database.closeDatabaseConnection();
+				return true;
+			}else{
+				database.closeDatabaseConnection();
+				return false;
 			}
-		
 		} catch (InvalidKeyException e) {
 			e.printStackTrace();
 			return false;
