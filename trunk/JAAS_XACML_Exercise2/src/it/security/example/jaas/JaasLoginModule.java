@@ -1,12 +1,10 @@
 package it.security.example.jaas;
 
 import it.security.example.database.MyDatabase;
-import it.security.example.metadata.RoleMetaData;
-import it.security.example.model.Professor;
-import it.security.example.model.Student;
 import it.security.example.model.User;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -22,7 +20,6 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
-import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 
@@ -135,6 +132,8 @@ public class JaasLoginModule implements LoginModule {
 		} catch (BadPaddingException e) {
 			e.printStackTrace();
 		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		
