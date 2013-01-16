@@ -317,7 +317,7 @@ public class MyDatabase {
 		SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
 
 		/* Encrypt the message. */
-		Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		aes.init(Cipher.ENCRYPT_MODE,secret);
 		byte[] ciphertext = aes.doFinal(valuesToBeCrypted.getBytes());
 		return new String(ciphertext);
@@ -341,7 +341,7 @@ public class MyDatabase {
 		SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
 		
 		/* Decrypt the message. */
-		Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		aes.init(Cipher.DECRYPT_MODE, secret);
 		return new String(aes.doFinal(valuesToBeDecrypted.getBytes()));	
 	}
