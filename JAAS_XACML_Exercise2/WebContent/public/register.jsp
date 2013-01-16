@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>SDCS - Registration Page</title>
 <SCRIPT TYPE="text/javascript">
-function dropdown(mySel){
+function showMenu(mySel){
 	var myVal;
 	myVal = mySel.options[mySel.selectedIndex].value;
 	if(myVal == "Professor"){
@@ -37,9 +37,8 @@ function dropdown(mySel){
   <p style="text-align: center;">Username:<input name="USERNAME"> <br></p>
   <p style="text-align: center;">Password:<input name="PASSWORD" type="password"><br></p>
   <p align="center">
-	<select ONCHANGE="showMenu(this.options[this.selectedIndex].value)" name="role">
-		<option selected>Select a Role</option>
-		<option>Professor</option>
+	<select ONCHANGE="showMenu(this)" name="role">
+		<option selected>Professor</option>
 		<option>Student</option>
 	</select>
   
@@ -53,7 +52,6 @@ function dropdown(mySel){
   <div style="text-align: center;">
   <input name="reset" value="Reset" type="reset">&nbsp; 
   <input name="login" value="Submit"  type="submit">
-  </div>
   </div>
 </form>
 <br>
