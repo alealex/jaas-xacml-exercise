@@ -44,48 +44,30 @@ public class RegistrationServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Parametri di registrazione inviati: ");
 		System.out.println("Memorizzo dati in db... ");
+		
+		PrintWriter pw = response.getWriter();
+		
+		
+		response.setContentType("TEXT/HTML");
+		pw.write("<HTML>");
+		pw.write("<HEAD>");
+		pw.write("<TITLE> Risposta Servlet Security </TITLE>");
+		pw.write("</HEAD>");
+		
+		pw.write("<BODY>");
+		
+		pw.write("<p align=\"left\">--------- STAMPA RICHIESTA DB ----------</p>");
+		
 		try {
-			PrintWriter pw = response.getWriter();
-			saveUserIntoDB(request);
-			
-			MyDatabase db =  new MyDatabase();
-			db.createDatabaseConnection();
-			Student studente = (Student) db.getStudent(request.getParameter("USERNAME"));
-			db.closeDatabaseConnection();
-			
-			response.setContentType("TEXT/HTML");
-			pw.write("<HTML>");
-			pw.write("<HEAD>");
-			pw.write("<TITLE> Risposta Servlet Security </TITLE>");
-			pw.write("</HEAD>");
-			
-			pw.write("<BODY>");
-			
-			pw.write("<p align=\"left\">--------- STAMPA RICHIESTA DB ----------</p>");
-			
-			pw.write("<p align=\"left\">RUOLO: "+ studente.getUsername()+"</p>");
-			pw.write("</BODY>");
-			pw.write("</HTML>");
-			pw.close();
+			pw.write("<p align=\"left\">RUOLO: "+ saveUserIntoDB(request) +"</p>");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			e.printStackTrace();
-		} catch (InvalidKeySpecException e) {
-			e.printStackTrace();
 		}
-
-		
+		pw.write("</BODY>");
+		pw.write("</HTML>");
+		pw.close();
 	}
 	
 	public boolean saveUserIntoDB(HttpServletRequest request) throws SQLException, ClassNotFoundException{
