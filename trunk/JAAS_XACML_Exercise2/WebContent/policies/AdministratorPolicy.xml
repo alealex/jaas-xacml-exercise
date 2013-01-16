@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Policy xmlns="urn:oasis:names:tc:xacml:2.0:policy:schema:os" PolicyId="AmministratorePolicy" RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:permit-overrides">
+  <Description>Accesso risorse Professore</Description>
+  <Target>
+    <Subjects>
+      <AnySubject />
+    </Subjects>
+    <Resources>
+      <AnyResource />
+    </Resources>
+    <Actions>
+      <AnyAction />
+    </Actions>
+  </Target>
+  <Rule Effect="Permit" RuleId="PermitProfessor">
+    <Description>Consente l'accesso</Description>
+    <Target>
+      <Subjects>
+        <Subject>
+          <SubjectMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">professor</AttributeValue>
+            <SubjectAttributeDesignator AttributeId="ROLE" DataType="http://www.w3.org/2001/XMLSchema#string" />
+          </SubjectMatch>
+        </Subject>
+      </Subjects>
+      <Resources>
+        <AnyResource />
+      </Resources>
+      <Actions>
+        <AnyAction />
+      </Actions>
+    </Target>
+  </Rule>
+</Policy>
+
