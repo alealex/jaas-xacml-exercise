@@ -250,9 +250,13 @@ public class MyDatabase {
 		      stmt.setString(2,  Base64.encodeBytes(cipherTextValue(password.getBytes("UTF-8"))));
 		      ResultSet rs = stmt.executeQuery();
 		      
-		      Integer userIsMatched = rs.getInt("RESULT1");
-		      if(userIsMatched == 1) return true;
-		      else return false;
+		      Integer userIsMatched = null;
+		      if(rs.next()){
+		    	  userIsMatched = rs.getInt("RESULT1");
+		    	  System.out.println("Ho trovato: "+ userIsMatched + " utenti gia' registrati con questa useranme");
+		      		if(userIsMatched > 0) return true;
+		      		else return false;
+		      }else return false;
 		      
 		   }catch (SQLException e) {
 			e.printStackTrace();
