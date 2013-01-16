@@ -9,6 +9,7 @@ import it.security.example.model.User;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -83,7 +84,7 @@ public class JaasLoginModule implements LoginModule {
 
 		NameCallback nameCallback = (NameCallback) callbacks[0];
 		PasswordCallback passwordCallback = (PasswordCallback) callbacks[1];
-
+		loggedUser=new User();
 		loggedUser.setUsername(nameCallback.getName());
 		loggedUser.setPassword(String.valueOf(passwordCallback.getPassword()));
 
@@ -124,19 +125,16 @@ public class JaasLoginModule implements LoginModule {
 //			e.printStackTrace();
 //		}
 		catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
 			e.printStackTrace();
 		}
 		
