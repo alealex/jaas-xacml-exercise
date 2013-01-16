@@ -130,6 +130,33 @@ public class MyDatabase {
 		      catch (Exception e){e.printStackTrace();}
 		   }
 	}
+	
+	public Boolean loginUser(
+			String username,
+			String password){
+		
+		String QUERY_LOGIN_USER = "SELECT COUNT(*) FROM "+UserMetaData.USERS_TABLE+
+				" WHERE "+UserMetaData.USERS_USERNAME+"=? "+
+				"AND "+UserMetaData.USERS_PASSWORD+"=?";
+		return true;
+//		PreparedStatement stmt = null;
+//		   try {
+//		      stmt = getConnection().prepareStatement(QUERY_LOGIN_USER);
+//		      stmt.setString(1, cipherTextValue(username));
+//		      stmt.setString(2, cipherTextValue(password));
+//		     
+//		      return stmt.executeUpdate();
+//		   }catch (SQLException e) {
+//			e.printStackTrace();
+//			return -1;
+//		   }
+//		   finally {
+//		      try {
+//		         if (stmt != null) { stmt.close(); }
+//		      }
+//		      catch (Exception e){e.printStackTrace();}
+//		   }
+	}
 		
 	public String getUserRole(User utente) 
 			throws SQLException,
