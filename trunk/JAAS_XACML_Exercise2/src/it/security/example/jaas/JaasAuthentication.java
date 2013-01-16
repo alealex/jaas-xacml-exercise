@@ -18,7 +18,8 @@ public class JaasAuthentication {
 	}
 	
 	public void tryLogin ( ) {
-		System.setProperty("java.security.auth.login.config", CONFIG_PATH+"JAAS_XACML_Exercise2/WebContent/jaasconfiguration/authenticationjaas.config");			
+		System.setProperty("java.security.auth.login.config", CONFIG_PATH
+				+"JAAS_XACML_Exercise2/WebContent/jaasconfiguration/authenticationjaas.config");			
 		
 		try {
 			//Instanzio il loginContext ed il callback handler

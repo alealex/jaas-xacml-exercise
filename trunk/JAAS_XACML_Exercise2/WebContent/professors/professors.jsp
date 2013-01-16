@@ -21,7 +21,7 @@ String subject = (String) sessione.getAttribute("SUBJECT");
 
 <br>
 <p> Your username is: <span style="color: black;"><%=username %></span> </p>
-<p> You were born in : <span style="color: black;"><%=date %></span> </p>
+<p> You were born on : <span style="color: black;"><%=date %></span> </p>
 <p> Your professorNumber is: <span style="color: black;"><%=professorNumber %></span> </p>
 <p> You teach the following subject: <span style="color: black;"><%=subject %></span> </p>
 <br>
