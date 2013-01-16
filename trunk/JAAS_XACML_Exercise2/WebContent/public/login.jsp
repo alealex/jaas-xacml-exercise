@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Login Page</title></head><body>
-<form style="height: 83px;" method="POST" action="http://localhost:8080/JAAS_XACML_EXERCISE2/LoginServlet" name="login">
+<form style="height: 83px;" method="POST" action="http://localhost:8080/JAAS_XACML_Exercise2/LoginServlet" name="login">
   <div style="text-align: center;">
   </div>
 <p style="text-align: center;"><strong><img style="width: 484px; height: 75px;" alt="TeamAndroid" 
@@ -21,7 +21,7 @@
   </div>
   
   <div style="text-align: center;">
-  <h3><a href="/public/register.jsp">Create a New Account</a></h3>
+  <h3><a href="<%=request.getContextPath()%>/public/register.jsp">Create a New Account</a></h3>
   </div>
 </form>
 <br>
