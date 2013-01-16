@@ -7,27 +7,25 @@ import it.security.example.model.Professor;
 import it.security.example.model.Student;
 import it.security.example.model.User;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-
 
 public class MyDatabase {
 	
@@ -70,7 +68,8 @@ public class MyDatabase {
 					NoSuchPaddingException, 
 					IllegalBlockSizeException, 
 					BadPaddingException,
-					InvalidKeySpecException{
+					InvalidKeySpecException,
+					UnsupportedEncodingException{
 		
 		String QUERY_ADD_USER = "INSERT INTO "+UserMetaData.USERS_TABLE+" "
 				+"("+UserMetaData.USERS_USERNAME+","
@@ -81,9 +80,9 @@ public class MyDatabase {
 		PreparedStatement stmt = null;
 		   try {
 		      stmt = getConnection().prepareStatement(QUERY_ADD_USER);
-		      stmt.setString(1, cipherTextValue(username));
-		      stmt.setString(2, cipherTextValue(password));
-		      stmt.setString(3, cipherTextValue(role));
+		      stmt.setString(1, Base64.encodeBytes(cipherTextValue(username.getBytes("UTF-8"))));
+		      stmt.setString(2, Base64.encodeBytes(cipherTextValue(password.getBytes("UTF-8"))));
+		      stmt.setString(3, Base64.encodeBytes(cipherTextValue(role.getBytes("UTF-8"))));
 		      return stmt.executeUpdate();
 		   }catch (SQLException e) {
 			e.printStackTrace();
@@ -109,7 +108,8 @@ public class MyDatabase {
 				NoSuchPaddingException, 
 				IllegalBlockSizeException, 
 				BadPaddingException,
-				InvalidKeySpecException{
+				InvalidKeySpecException,
+				UnsupportedEncodingException{
 		
 		String QUERY_ADD_STUDENT = "INSERT INTO "+StudentMetaData.STUDENTS_TABLE+" "
 			+"("+StudentMetaData.STUDENTS_USERNAME+","
@@ -122,11 +122,11 @@ public class MyDatabase {
 		PreparedStatement stmt = null;
 		   try {
 		      stmt = getConnection().prepareStatement(QUERY_ADD_STUDENT);
-		      stmt.setString(1, cipherTextValue(username));
-		      stmt.setString(2, cipherTextValue(name));
-		      stmt.setString(3, cipherTextValue(surname));
-		      stmt.setString(4, cipherTextValue(dateOfBirth));
-		      stmt.setString(5, cipherTextValue(studentNumber));
+		      stmt.setString(1, Base64.encodeBytes(cipherTextValue(username.getBytes("UTF-8"))));
+		      stmt.setString(2, Base64.encodeBytes(cipherTextValue(name.getBytes("UTF-8"))));
+		      stmt.setString(3, Base64.encodeBytes(cipherTextValue(surname.getBytes("UTF-8"))));
+		      stmt.setString(4, Base64.encodeBytes(cipherTextValue(dateOfBirth.getBytes("UTF-8"))));
+		      stmt.setString(5, Base64.encodeBytes(cipherTextValue(studentNumber.getBytes("UTF-8"))));
 		      return stmt.executeUpdate();
 		   }catch (SQLException e) {
 			e.printStackTrace();
@@ -152,7 +152,8 @@ public class MyDatabase {
 				NoSuchPaddingException, 
 				IllegalBlockSizeException, 
 				BadPaddingException,
-				InvalidKeySpecException{
+				InvalidKeySpecException,
+				UnsupportedEncodingException{
 		
 		String QUERY_ADD_PROFESSOR = "INSERT INTO "+ProfessorMetaData.PROFESSORS_TABLE+" "
 				+"("+ProfessorMetaData.PROFESSORS_USERNAME+","
@@ -160,18 +161,18 @@ public class MyDatabase {
 				+ProfessorMetaData.PROFESSORS_SURNAME+","
 				+ProfessorMetaData.PROFESSORS_DATE_OF_BIRTH+","
 				+ProfessorMetaData.PROFESSORS_NUMBER+","
-				+ProfessorMetaData.PROFESSORS_SUBJECT+","+")"
+				+ProfessorMetaData.PROFESSORS_SUBJECT+")"
 				+ "VALUES (?,?,?,?,?,?)";
 		
 		PreparedStatement stmt = null;
 		   try {
 		      stmt = getConnection().prepareStatement(QUERY_ADD_PROFESSOR);
-		      stmt.setString(1, cipherTextValue(username));
-		      stmt.setString(2, cipherTextValue(name));
-		      stmt.setString(3, cipherTextValue(surname));
-		      stmt.setString(4, cipherTextValue(dateOfBirth));
-		      stmt.setString(5, cipherTextValue(professorNumber));
-		      stmt.setString(6, cipherTextValue(subject));
+		      stmt.setString(1,  Base64.encodeBytes(cipherTextValue(username.getBytes("UTF-8"))));
+		      stmt.setString(2,  Base64.encodeBytes(cipherTextValue(name.getBytes("UTF-8"))));
+		      stmt.setString(3,  Base64.encodeBytes(cipherTextValue(surname.getBytes("UTF-8"))));
+		      stmt.setString(4,  Base64.encodeBytes(cipherTextValue(dateOfBirth.getBytes("UTF-8"))));
+		      stmt.setString(5,  Base64.encodeBytes(cipherTextValue(professorNumber.getBytes("UTF-8"))));
+		      stmt.setString(6,  Base64.encodeBytes(cipherTextValue(subject.getBytes("UTF-8"))));
 		      return stmt.executeUpdate();
 		   }catch (SQLException e) {
 			e.printStackTrace();
@@ -185,6 +186,47 @@ public class MyDatabase {
 		   }
 	}
 	
+	public Boolean checkUsername(String username)
+			throws SQLException,
+			InvalidKeyException,
+			NoSuchAlgorithmException,
+			NoSuchPaddingException, 
+			IllegalBlockSizeException, 
+			BadPaddingException,
+			InvalidKeySpecException,
+			UnsupportedEncodingException{
+		
+		String QUERY_CHECK_USERNAME = "SELECT COUNT(*) AS RESULT1 FROM "+UserMetaData.USERS_TABLE+
+				" WHERE "+UserMetaData.USERS_USERNAME+"=?";
+		
+		PreparedStatement stmt = null;
+		   try {
+		      stmt = getConnection().prepareStatement(QUERY_CHECK_USERNAME);
+		      stmt.setString(1,  Base64.encodeBytes(cipherTextValue(username.getBytes("UTF-8"))));
+		      ResultSet rs = stmt.executeQuery();
+		      
+		      Integer userIsMatched= null;
+		      if(rs.next()){
+		    	  userIsMatched = rs.getInt("RESULT1");
+		    	  System.out.println("Ho trovato: "+ userIsMatched + " utenti gia' registrati con questa useranme");
+		      		if(userIsMatched > 0) return true;
+		      		else return false;
+		      }else return false;
+		      
+		      
+		   }catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		   }
+		   finally {
+		      try {
+		         if (stmt != null) { stmt.close(); }
+		      }
+		      catch (Exception e){e.printStackTrace();}
+		   }
+		
+	}
+	
 	public Boolean loginUser(
 			String username,
 			String password)
@@ -194,7 +236,8 @@ public class MyDatabase {
 						NoSuchPaddingException, 
 						IllegalBlockSizeException, 
 						BadPaddingException,
-						InvalidKeySpecException{
+						InvalidKeySpecException,
+						UnsupportedEncodingException{
 		
 		String QUERY_LOGIN_USER = "SELECT COUNT(*) AS RESULT1 FROM "+UserMetaData.USERS_TABLE+
 				" WHERE "+UserMetaData.USERS_USERNAME+"=?"+
@@ -203,8 +246,8 @@ public class MyDatabase {
 		PreparedStatement stmt = null;
 		   try {
 		      stmt = getConnection().prepareStatement(QUERY_LOGIN_USER);
-		      stmt.setString(1, cipherTextValue(username));
-		      stmt.setString(2, cipherTextValue(password));
+		      stmt.setString(1,  Base64.encodeBytes(cipherTextValue(username.getBytes("UTF-8"))));
+		      stmt.setString(2,  Base64.encodeBytes(cipherTextValue(password.getBytes("UTF-8"))));
 		      ResultSet rs = stmt.executeQuery();
 		      
 		      Integer userIsMatched = rs.getInt("RESULT1");
@@ -230,7 +273,8 @@ public class MyDatabase {
 					NoSuchPaddingException, 
 					IllegalBlockSizeException, 
 					BadPaddingException,
-					InvalidKeySpecException{
+					InvalidKeySpecException,
+					IOException{
 		
 		String QUERY_USER_ROLE = "SELECT DISTINCT"+UserMetaData.USERS_ROLE+
 							" FROM "+UserMetaData.USERS_TABLE+
@@ -239,10 +283,10 @@ public class MyDatabase {
 		PreparedStatement stmt = null;
 		   try {
 		      stmt = getConnection().prepareStatement(QUERY_USER_ROLE);
-		      stmt.setString(1, cipherTextValue(utente.getUsername()));
+		      stmt.setString(1,  Base64.encodeBytes(cipherTextValue(utente.getUsername().getBytes("UTF-8"))));
 		      ResultSet rs = stmt.executeQuery();
 		      if (rs.next())
-					return decipherTextValues(rs.getString(UserMetaData.USERS_ROLE));
+					return new String(decipherTextValues(Base64.decode(rs.getString(UserMetaData.USERS_ROLE))));
 				else return null;
 		   }catch (SQLException e) {
 			e.printStackTrace();
@@ -263,27 +307,28 @@ public class MyDatabase {
 				NoSuchPaddingException, 
 				IllegalBlockSizeException, 
 				BadPaddingException,
-				InvalidKeySpecException{
+				InvalidKeySpecException,
+				IOException{
 		
 		String QUERY_STUDENT = null;
 		Student student = new Student();
 
 		QUERY_STUDENT = "SELECT DISTINCT *"+
-			" FROM "+UserMetaData.USERS_TABLE+
-			" WHERE "+UserMetaData.USERS_USERNAME+"='"+username+"'";
+			" FROM "+StudentMetaData.STUDENTS_TABLE+
+			" WHERE "+StudentMetaData.STUDENTS_USERNAME+"=?";
 		
 		PreparedStatement stmt = null;
 		   try {
 		      stmt = getConnection().prepareStatement(QUERY_STUDENT);
-		      stmt.setString(1, cipherTextValue(username));
+		      stmt.setString(1, Base64.encodeBytes(cipherTextValue(username.getBytes("UTF-8"))));
 		      ResultSet rs = stmt.executeQuery();
 		      if(rs.next()){
-					student.set_id(Integer.valueOf(decipherTextValues(String.valueOf(rs.getInt(StudentMetaData.STUDENTS_ID)))));
-					student.setUsername(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_USERNAME)));
-					student.setName(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_NAME)));
-					student.setSurname(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_SURNAME)));
-					student.setStudent_Number(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_NUMBER)));
-					student.setDate_Of_Birth(decipherTextValues(rs.getString(StudentMetaData.STUDENTS_DATE_OF_BIRTH)));			
+					student.set_id(Integer.valueOf(new String(rs.getBytes(StudentMetaData.STUDENTS_ID))));
+					student.setUsername(new String(decipherTextValues(Base64.decode(rs.getString(StudentMetaData.STUDENTS_USERNAME)))));
+					student.setName(new String(decipherTextValues(Base64.decode(rs.getString(StudentMetaData.STUDENTS_NAME)))));
+					student.setSurname(new String(decipherTextValues(Base64.decode(rs.getString(StudentMetaData.STUDENTS_SURNAME)))));
+					student.setStudent_Number(new String(decipherTextValues(Base64.decode(rs.getString(StudentMetaData.STUDENTS_NUMBER)))));
+					student.setDate_Of_Birth(new String(decipherTextValues(Base64.decode(rs.getString(StudentMetaData.STUDENTS_DATE_OF_BIRTH)))));			
 				}
 				return student;
 				
@@ -306,29 +351,29 @@ public class MyDatabase {
 					NoSuchPaddingException, 
 					IllegalBlockSizeException, 
 					BadPaddingException,
-					InvalidKeySpecException{
+					InvalidKeySpecException,
+					IOException{
 		
 		String QUERY_PROFESSOR = null;
 		Professor professor = new Professor();
 
 		QUERY_PROFESSOR = "SELECT DISTINCT *"+
 			" FROM "+ProfessorMetaData.PROFESSORS_TABLE+
-			" WHERE "+ProfessorMetaData.PROFESSORS_USERNAME+"='"+username+"'";
+			" WHERE "+ProfessorMetaData.PROFESSORS_USERNAME+"=?";
 		
 		PreparedStatement stmt = null;
 		   try {
 		      stmt = getConnection().prepareStatement(QUERY_PROFESSOR);
-		      stmt.setString(1, cipherTextValue(username));
+		      stmt.setString(1, Base64.encodeBytes(cipherTextValue(username.getBytes("UTF-8"))));
 		      ResultSet rs = stmt.executeQuery();
 		      if(rs.next()){
-		    	  professor.set_id(Integer.valueOf(decipherTextValues(String.valueOf(rs.getInt(ProfessorMetaData.PROFESSORS_ID)))));
-		    	  professor.setUsername(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_USERNAME)));
-		    	  professor.setName(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_NAME)));
-		    	  professor.setSurname(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_SURNAME)));
-		    	  professor.setProfessor_Number(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_NUMBER)));
-		    	  professor.setDate_Of_Birth(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_DATE_OF_BIRTH)));			
-		    	  professor.setSubject(decipherTextValues(rs.getString(ProfessorMetaData.PROFESSORS_SUBJECT)));			
-
+		    	  professor.set_id(Integer.valueOf(new String(rs.getBytes(ProfessorMetaData.PROFESSORS_ID))));
+		    	  professor.setUsername(new String(decipherTextValues(Base64.decode(rs.getString(ProfessorMetaData.PROFESSORS_USERNAME)))));
+		    	  professor.setName(new String(decipherTextValues(Base64.decode(rs.getString(ProfessorMetaData.PROFESSORS_NAME)))));
+		    	  professor.setSurname(new String(decipherTextValues(Base64.decode(rs.getString(ProfessorMetaData.PROFESSORS_SURNAME)))));
+		    	  professor.setProfessor_Number(new String(decipherTextValues(Base64.decode(rs.getString(ProfessorMetaData.PROFESSORS_NUMBER)))));
+		    	  professor.setDate_Of_Birth(new String(decipherTextValues(Base64.decode(rs.getString(ProfessorMetaData.PROFESSORS_DATE_OF_BIRTH)))));			
+		    	  professor.setSubject(new String(decipherTextValues(Base64.decode(rs.getString(ProfessorMetaData.PROFESSORS_SUBJECT)))));			
 		      }
 			return professor;
 				
@@ -345,52 +390,44 @@ public class MyDatabase {
 	}
 	
 	
-	private String cipherTextValue(String valuesToBeCrypted) 
+	private byte[] cipherTextValue(byte[] valuesToBeCrypted) 
 			throws NoSuchAlgorithmException, 
 			NoSuchPaddingException, 
 			InvalidKeyException,
 			IllegalBlockSizeException,
 			BadPaddingException,
-			InvalidKeySpecException{
+			InvalidKeySpecException,
+			UnsupportedEncodingException{
 		
-		/* Derive the key, given password and salt. */
-		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-		KeySpec spec = new PBEKeySpec(
-				rb.getString("properties.encryptKey").toCharArray(),
-				SecureRandom.getSeed(8), 
-				65536, 
-				256);
-		SecretKey tmp = factory.generateSecret(spec);
-		SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+		byte[] key = (rb.getString("properties.encryptKey")).getBytes("UTF-8");
+		MessageDigest sha = MessageDigest.getInstance("SHA-1");
+		key = sha.digest(key);
+		key = Arrays.copyOf(key, 16); // use only first 128 bit
 
-		/* Encrypt the message. */
-		Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
-		aes.init(Cipher.ENCRYPT_MODE,secret);
-		byte[] ciphertext = aes.doFinal(valuesToBeCrypted.getBytes());
-		return new String(ciphertext);
+		SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+		
+		Cipher cipher =  Cipher.getInstance("AES");
+		cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+		return cipher.doFinal(valuesToBeCrypted);	
 	}
 	
-	private String decipherTextValues(String valuesToBeDecrypted)
+	private byte[] decipherTextValues(byte[] valuesToBeDecrypted)
 			throws NoSuchAlgorithmException, 
 			NoSuchPaddingException, 
 			InvalidKeyException,
 			IllegalBlockSizeException,
 			BadPaddingException,
-			InvalidKeySpecException{
-		/* Derive the key, given password and salt. */
-		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-		KeySpec spec = new PBEKeySpec(
-				rb.getString("properties.encryptKey").toCharArray(),
-				SecureRandom.getSeed(8), 
-				65536, 
-				256);
-		SecretKey tmp = factory.generateSecret(spec);
-		SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
-		
-		/* Decrypt the message. */
-		Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
-		aes.init(Cipher.DECRYPT_MODE, secret);
-		return new String(aes.doFinal(valuesToBeDecrypted.getBytes()));	
+			InvalidKeySpecException,
+			UnsupportedEncodingException{
+		byte[] key = (rb.getString("properties.encryptKey")).getBytes("UTF-8");
+		MessageDigest sha = MessageDigest.getInstance("SHA-1");
+		key = sha.digest(key);
+		key = Arrays.copyOf(key, 16); // use only first 128 bit
+
+		SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+		Cipher cipher =  Cipher.getInstance("AES");
+		cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+		return cipher.doFinal(valuesToBeDecrypted);
 	}
 	
 	public Connection getConnection() {
