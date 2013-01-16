@@ -91,16 +91,7 @@ public class JaasLoginModule implements LoginModule {
 			database.createDatabaseConnection();
 			if(database.loginUser(loggedUser.getUsername(), loggedUser.getPassword())){
 				succeeded=true;
-//				loggedUser.setRole(database.getUserRole(loggedUser));
-//				if(loggedUser.getRole().equals(RoleMetaData.ISPROFESSOR)){
-//					Professor loggedProfessor = database.getProfessor(loggedUser.getUsername());
-//					
-//					succeeded=true;
-//				}else if(loggedUser.getRole().equals(RoleMetaData.ISSTUDENT)){
-//					Student loggedStudent = database.getStudent(loggedUser.getUsername());
-//
-//					succeeded=true;
-//						}
+
 				}
 			else{
 				succeeded=false;
@@ -110,17 +101,6 @@ public class JaasLoginModule implements LoginModule {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-//		catch (InvalidKeyException e) {
-//			e.printStackTrace();
-//		} catch (NoSuchAlgorithmException e) {
-//			e.printStackTrace();
-//		} catch (NoSuchPaddingException e) {
-//			e.printStackTrace();
-//		} catch (IllegalBlockSizeException e) {
-//			e.printStackTrace();
-//		} catch (BadPaddingException e) {
-//			e.printStackTrace();
-//		}
 		catch (InvalidKeyException e) {
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
