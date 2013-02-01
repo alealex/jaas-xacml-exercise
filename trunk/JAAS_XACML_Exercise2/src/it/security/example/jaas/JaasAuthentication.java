@@ -18,7 +18,7 @@ public class JaasAuthentication {
 //	private String CONFIG_PATH="/Users/pasqualederosa/Documents/workspace-security/";
 //	private String CONFIG_FILE_PATH = "/home/giancarlo/Scrivania/authenticationjaas.config";
 	
-	//GIANCARLO
+	// GIANCARLO
 	private String CONFIG_PATH="/home/giancarlo/Scrivania/Cioppy/Università/Magistrale/Applicazioni Telematiche/workspace2/";
 	private String CONFIG_FILE_PATH = "/home/giancarlo/Scrivania/authenticationjaas.config";
 
