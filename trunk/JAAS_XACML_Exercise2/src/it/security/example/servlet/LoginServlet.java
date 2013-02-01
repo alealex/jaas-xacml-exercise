@@ -13,8 +13,11 @@ import it.security.example.model.User;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -58,58 +61,45 @@ public class LoginServlet extends HttpServlet {
 		
 		Subject subject = jaasAuthentication.tryLogin();
 		
-		boolean esitoLogin = true;
-		if(esitoLogin){
+		if(subject!=null){
+			
+			Iterator<Principal> iterator=subject.getPrincipals().iterator();
+			ArrayList<String> principalString=new ArrayList<String>();
+			while(iterator.hasNext()){
+				principalString.add(iterator.next().getName());
+			}
+			
 			User loggedUser=new User();
-			loggedUser.setUsername(request.getParameter(UserMetaData.USERS_USERNAME));
-			loggedUser.setPassword(request.getParameter(UserMetaData.USERS_PASSWORD));
-			try {
-				MyDatabase database=new MyDatabase();
-				database.createDatabaseConnection();
-				System.out.println("Il ruolo dell'utente e': "+database.getUserRole(loggedUser));
-				
-				if(database.getUserRole(loggedUser).toLowerCase().equals(RoleMetaData.ISPROFESSOR)){
-					System.out.println("L'utente e' un professore");
-					Professor professor=new Professor();
-					professor=database.getProfessor(loggedUser.getUsername());
-					HttpSession session=request.getSession();
-					session.setAttribute(ProfessorMetaData.PROFESSORS_USERNAME, professor.getUsername());
-					session.setAttribute(ProfessorMetaData.PROFESSORS_NAME, professor.getName());
-					session.setAttribute(ProfessorMetaData.PROFESSORS_SURNAME, professor.getSurname());
-					session.setAttribute(ProfessorMetaData.PROFESSORS_DATE_OF_BIRTH, professor.getDate_Of_Birth());
-					session.setAttribute(ProfessorMetaData.PROFESSORS_NUMBER, professor.getProfessor_Number());
-					session.setAttribute(ProfessorMetaData.PROFESSORS_SUBJECT, professor.getSubject());
-					session.setAttribute(UserMetaData.USERS_ROLE, RoleMetaData.ISPROFESSOR);					
+			loggedUser.setRole(principalString.get(0));
+
+				if(loggedUser.getRole().toLowerCase().equals(RoleMetaData.ISPROFESSOR)){
+//					System.out.println("L'utente e' un professore");
+//					Professor professor=new Professor();
+//					professor=database.getProfessor(loggedUser.getUsername());
+//					HttpSession session=request.getSession();
+//					session.setAttribute(ProfessorMetaData.PROFESSORS_USERNAME, professor.getUsername());
+//					session.setAttribute(ProfessorMetaData.PROFESSORS_NAME, professor.getName());
+//					session.setAttribute(ProfessorMetaData.PROFESSORS_SURNAME, professor.getSurname());
+//					session.setAttribute(ProfessorMetaData.PROFESSORS_DATE_OF_BIRTH, professor.getDate_Of_Birth());
+//					session.setAttribute(ProfessorMetaData.PROFESSORS_NUMBER, professor.getProfessor_Number());
+//					session.setAttribute(ProfessorMetaData.PROFESSORS_SUBJECT, professor.getSubject());
+//					session.setAttribute(UserMetaData.USERS_ROLE, RoleMetaData.ISPROFESSOR);					
 					response.sendRedirect(response.encodeRedirectUrl("/JAAS_XACML_Exercise2/professors/professors.jsp"));
 				}
-				else if(database.getUserRole(loggedUser).toLowerCase().equals(RoleMetaData.ISSTUDENT)){
+				else if(loggedUser.getRole().toLowerCase().equals(RoleMetaData.ISSTUDENT)){
 					System.out.println("L'utente e' uno studente");
-					Student student=new Student();
-					student=database.getStudent(loggedUser.getUsername());
-					HttpSession session=request.getSession();
-					session.setAttribute(StudentMetaData.STUDENTS_USERNAME, student.getUsername());
-					session.setAttribute(StudentMetaData.STUDENTS_NAME, student.getName());
-					session.setAttribute(StudentMetaData.STUDENTS_SURNAME, student.getSurname());
-					session.setAttribute(StudentMetaData.STUDENTS_NUMBER, student.getStudent_Number());
-					session.setAttribute(StudentMetaData.STUDENTS_DATE_OF_BIRTH, student.getDate_Of_Birth());			
-					session.setAttribute(UserMetaData.USERS_ROLE, RoleMetaData.ISSTUDENT);					
+//					Student student=new Student();
+//					student=database.getStudent(loggedUser.getUsername());
+//					HttpSession session=request.getSession();
+//					session.setAttribute(StudentMetaData.STUDENTS_USERNAME, student.getUsername());
+//					session.setAttribute(StudentMetaData.STUDENTS_NAME, student.getName());
+//					session.setAttribute(StudentMetaData.STUDENTS_SURNAME, student.getSurname());
+//					session.setAttribute(StudentMetaData.STUDENTS_NUMBER, student.getStudent_Number());
+//					session.setAttribute(StudentMetaData.STUDENTS_DATE_OF_BIRTH, student.getDate_Of_Birth());			
+//					session.setAttribute(UserMetaData.USERS_ROLE, RoleMetaData.ISSTUDENT);					
 					response.sendRedirect(response.encodeRedirectUrl("/JAAS_XACML_Exercise2/students/students.jsp"));
 				}
-			} catch (InvalidKeyException e) {
-				e.printStackTrace();
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (NoSuchPaddingException e) {
-				e.printStackTrace();
-			} catch (IllegalBlockSizeException e) {
-				e.printStackTrace();
-			} catch (BadPaddingException e) {
-				e.printStackTrace();
-			} catch (InvalidKeySpecException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			
 		}
 		else{
 			System.out.println("The username or the password are not correct. Please check your data and try again the login !!!");

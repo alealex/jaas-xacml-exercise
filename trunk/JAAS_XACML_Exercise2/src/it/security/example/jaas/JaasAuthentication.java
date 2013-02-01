@@ -14,10 +14,15 @@ public class JaasAuthentication {
 //  private String CONFIG_FILE_PATH = "/home/giancarlo/Scrivania/authenticationjaas.config";
 	
 	// MARIO
-	private String CONFIG_FILE_PATH = "/Users/mario_fio/Desktop/authenticationjaas.config";
+//	private String CONFIG_FILE_PATH = "/Users/mario_fio/Desktop/authenticationjaas.config";
 	
+
+	// PAKO
+	private String CONFIG_FILE_PATH = "/Users/pasqualederosa/Desktop/authenticationjaas.config";
+
 	// GIANCARLO
 //	private String CONFIG_FILE_PATH = "/home/giancarlo/Scrivania/authenticationjaas.config";
+
 
 	public JaasAuthentication(String username, String password){
 		this.username=username;

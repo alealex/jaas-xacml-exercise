@@ -45,7 +45,7 @@ public class MyDatabase {
 		 * EVITANDO IL PASSAGGIO ATTRAVERSO JAAS
 		 */
 		this.dbDriver="com.mysql.jdbc.Driver";
-		this.dbUrl="jdbc:mysql://localhost:3306/SECURITY_DB";
+		this.dbUrl="jdbc:mysql://localhost:3306/SDCS-DB";
 		this.dbUserName="root";
 		this.dbPassword="";
 		this.encryptKey="A2Xb2bBSc6DP1OJCQF7UeO9lpGt6ZfQSBqZ1K1NyqBc=";
