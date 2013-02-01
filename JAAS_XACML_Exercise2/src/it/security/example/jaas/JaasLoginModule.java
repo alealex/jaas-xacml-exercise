@@ -93,7 +93,7 @@ public class JaasLoginModule implements LoginModule {
 
 		MyDatabase database=null;
 		try {
-			database = new MyDatabase();
+			database = new MyDatabase(options);
 			database.createDatabaseConnection();
 			if(database.loginUser(loggedUser.getUsername(), loggedUser.getPassword())){
 				succeeded=true;

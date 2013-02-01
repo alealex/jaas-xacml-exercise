@@ -19,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.crypto.BadPaddingException;
@@ -30,24 +31,52 @@ import javax.crypto.spec.SecretKeySpec;
 public class MyDatabase {
 	
 	private Connection connection;
-	private ResourceBundle rb; 
 	
-	public MyDatabase () throws SQLException, ClassNotFoundException{
+	private String dbDriver = "";
+	private String dbUrl = "";
+	private String dbUserName = "";
+	private String dbPassword = "";
+	private String encryptKey = "";
 	
-		rb = ResourceBundle.getBundle("db");
-		Class.forName(rb.getString("properties.driver"));		
+	public MyDatabase(){
+		/*
+		 * PER POTER EFFETTUARE IL DEBUG
+		 * RELATIVAMENTE ALLA REGISTRAZIONE SI E' PROCEDUTO
+		 * EVITANDO IL PASSAGGIO ATTRAVERSO JAAS
+		 */
+		this.dbDriver="com.mysql.jdbc.Driver";
+		this.dbUrl="jdbc:mysql://localhost:3306/SECURITY_DB";
+		this.dbUserName="root";
+		this.dbPassword="";
+		this.encryptKey="A2Xb2bBSc6DP1OJCQF7UeO9lpGt6ZfQSBqZ1K1NyqBc=";
+		
+	}
+	
+	public MyDatabase (
+			Map<String, ?> options
+			) throws SQLException, ClassNotFoundException{
+		
+	
+		this.dbDriver = (String) options.get("dbDriver");
+		this.dbUrl = (String) options.get("dbUrl");
+		this.dbUserName = (String) options.get("dbUserName");
+		this.dbPassword = (String) options.get("dbPassword");
+		this.encryptKey= (String) options.get("encryptKey");
+		
+		Class.forName(dbDriver);		
 	}
 	
 	public Connection createDatabaseConnection() throws SQLException{
 		
-		System.out.println("BUNDLE - Driver:"+rb.getString("properties.driver"));
-		System.out.println("BUNDLE - Username:" +rb.getString("properties.username"));
-		System.out.println("BUNDLE - Password:" +rb.getString("properties.password"));
+		System.out.println("OPTION - Driver:"+dbDriver);
+		System.out.println("OPTION - DB_URL:" +dbUrl);
+		System.out.println("OPTION - Username:" +dbUserName);
+		System.out.println("OPTION - Password:" +dbPassword);
 		
 		setConnection(DriverManager.getConnection(
-				rb.getString("properties.db.url"),
-				rb.getString("properties.username"),
-				rb.getString("properties.password")
+				dbUrl,
+				dbUserName,
+				dbPassword
 				));
 		return getConnection();
 	}
@@ -403,7 +432,7 @@ public class MyDatabase {
 			InvalidKeySpecException,
 			UnsupportedEncodingException{
 		
-		byte[] key = (rb.getString("properties.encryptKey")).getBytes("UTF-8");
+		byte[] key = encryptKey.getBytes("UTF-8");
 		MessageDigest sha = MessageDigest.getInstance("SHA-1");
 		key = sha.digest(key);
 		key = Arrays.copyOf(key, 16); // use only first 128 bit
@@ -423,7 +452,7 @@ public class MyDatabase {
 			BadPaddingException,
 			InvalidKeySpecException,
 			UnsupportedEncodingException{
-		byte[] key = (rb.getString("properties.encryptKey")).getBytes("UTF-8");
+		byte[] key = encryptKey.getBytes("UTF-8");
 		MessageDigest sha = MessageDigest.getInstance("SHA-1");
 		key = sha.digest(key);
 		key = Arrays.copyOf(key, 16); // use only first 128 bit

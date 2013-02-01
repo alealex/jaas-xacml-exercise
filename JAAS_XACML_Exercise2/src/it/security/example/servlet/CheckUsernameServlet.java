@@ -83,8 +83,6 @@ public class CheckUsernameServlet extends HttpServlet {
 			e.printStackTrace();
 		} catch (InvalidKeySpecException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}	
 	}
 

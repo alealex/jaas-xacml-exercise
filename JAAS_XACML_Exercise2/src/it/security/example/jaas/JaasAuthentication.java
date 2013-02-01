@@ -15,12 +15,12 @@ public class JaasAuthentication {
 
 	
 	// MARIO
-//	private String CONFIG_PATH="/Users/pasqualederosa/Documents/workspace-security/";
-//	private String CONFIG_FILE_PATH = "/home/giancarlo/Scrivania/authenticationjaas.config";
+	private String CONFIG_PATH="/Users/mario_fio/Documents/workspace-security/";
+	private String CONFIG_FILE_PATH = "/Users/mario_fio/Desktop/authenticationjaas.config";
 	
 	// GIANCARLO
-	private String CONFIG_PATH="/home/giancarlo/Scrivania/Cioppy/Università/Magistrale/Applicazioni Telematiche/workspace2/";
-	private String CONFIG_FILE_PATH = "/home/giancarlo/Scrivania/authenticationjaas.config";
+//	private String CONFIG_PATH="/home/giancarlo/Scrivania/Cioppy/Università/Magistrale/Applicazioni Telematiche/workspace2/";
+//	private String CONFIG_FILE_PATH = "/home/giancarlo/Scrivania/authenticationjaas.config";
 
 	public JaasAuthentication(String username, String password){
 		this.username=username;
