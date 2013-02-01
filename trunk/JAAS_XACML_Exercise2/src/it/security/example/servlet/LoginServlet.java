@@ -107,9 +107,6 @@ public class LoginServlet extends HttpServlet {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
 		}
 		else{
 			System.out.println("L'utente nunn e nisciun auhauhau");

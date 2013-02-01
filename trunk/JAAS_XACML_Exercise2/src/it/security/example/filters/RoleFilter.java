@@ -37,14 +37,15 @@ import com.sun.xacml.finder.impl.FilePolicyModule;
  */
 public class RoleFilter implements Filter {
 	File[] listaFile;//contiene le policy disponibili
+
 	//Pako
 //	String POLICY_PATH="/Users/pasqualederosa/Documents/workspaceSDCS/";
 	
 	//Mario
-//	String POLICY_PATH="/Users/pasqualederosa/Documents/workspaceSDCS/";
+	String POLICY_PATH="/Users/mario_fio/Documents/workspace-security/";
 	
 	//Giancarlo
-	String POLICY_PATH="/home/giancarlo/Scrivania/Cioppy/Università/Magistrale/Applicazioni Telematiche/workspace2/";
+//	String POLICY_PATH="/home/giancarlo/Scrivania/Cioppy/Università/Magistrale/Applicazioni Telematiche/workspace2/";
 	
     /**
      * Default constructor. 
