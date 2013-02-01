@@ -109,7 +109,7 @@ public class LoginServlet extends HttpServlet {
 			}
 		}
 		else{
-			System.out.println("L'utente nunn e nisciun auhauhau");
+			System.out.println("The username or the password are not correct. Please check your data and try again the login !!!");
 			response.sendRedirect(response.encodeRedirectUrl("/JAAS_XACML_Exercise2/public/login.jsp"));
 		}
 	}
