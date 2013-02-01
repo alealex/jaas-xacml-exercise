@@ -10,7 +10,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -32,10 +35,12 @@ public class JaasLoginModule implements LoginModule {
 	private Map options;
 	private User loggedUser;
 
+	private Vector<String> tempPrincipals;
 	private boolean succeeded = false;
 
 	public JaasLoginModule() {
 		System.out.println("Login Module - constructor called");
+		tempPrincipals  = new Vector<String>();
 	}
 
 	public boolean abort() throws LoginException {
@@ -86,6 +91,8 @@ public class JaasLoginModule implements LoginModule {
 			database = new MyDatabase(options);
 			database.createDatabaseConnection();
 			if(database.loginUser(loggedUser.getUsername(), loggedUser.getPassword())){
+				
+				loggedUser.setRole(database.getUserRole(loggedUser));
 				System.out.println("Il database ha tornato il valore");
 				succeeded=true;
 				}
@@ -112,6 +119,8 @@ public class JaasLoginModule implements LoginModule {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		return succeeded;
@@ -119,14 +128,26 @@ public class JaasLoginModule implements LoginModule {
 	}
 	
 	public boolean commit() throws LoginException {
-		System.out.println("Login Module - commit called");
+		System.out.println("Login Module - commit called");		
 		
-		ArrayList<JaasPrincipal> Principals = new ArrayList<JaasPrincipal>();
-		Principals.add(new JaasPrincipal(loggedUser.getRole()));
-		Principals.add(new JaasPrincipal((String) options.get("dbUrl")));
-		Principals.add(new JaasPrincipal((String) options.get("dbUserName")));
-		Principals.add(new JaasPrincipal((String) options.get("dbDriver")));
-		Principals.add(new JaasPrincipal((String) options.get("encryptKey")));
+		/*
+		 * PRINT FOR DEBUG
+		 */
+		System.out.println("COMMIT ROLE: "+ loggedUser.getRole());
+		System.out.println("COMMIT DB_URL: "+(String) options.get("dbUrl"));
+		System.out.println("COMMIT DB_USERNAME: "+(String) options.get("dbUserName"));
+		System.out.println("COMMIT DB_PASSWORD: "+(String) options.get("dbPassword"));
+		System.out.println("COMMIT DB_ENCRYPT_KEY: "+(String) options.get("encryptKey"));
+		System.out.println("COMMIT DB_DRIVER: "+(String) options.get("dbDriver"));
+		/* ********************************* */
+
+		subject.getPrincipals().add(new JaasPrincipal(loggedUser.getRole()));
+		subject.getPrincipals().add(new JaasPrincipal((String) options.get("dbUrl")));
+		subject.getPrincipals().add(new JaasPrincipal((String) options.get("dbUserName")));
+		subject.getPrincipals().add(new JaasPrincipal((String) options.get("dbPassword")));
+		subject.getPrincipals().add(new JaasPrincipal((String) options.get("dbDriver")));
+		subject.getPrincipals().add(new JaasPrincipal((String) options.get("encryptKey")));
+		subject.getPrincipals().add(new JaasPrincipal(loggedUser.getUsername()));
 		return succeeded;
 	}
 
