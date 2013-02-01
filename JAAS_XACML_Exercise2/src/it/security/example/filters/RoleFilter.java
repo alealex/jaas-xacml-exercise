@@ -66,7 +66,7 @@ public class RoleFilter implements Filter {
         String policyfile;
         FilePolicyModule policyModule = new FilePolicyModule();
         PolicyFinder policyFinder = new PolicyFinder();
-        Set policyModules = new HashSet();
+        Set<FilePolicyModule> policyModules = new HashSet<FilePolicyModule>();
       
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
@@ -90,7 +90,7 @@ public class RoleFilter implements Filter {
 	
 	        CurrentEnvModule envModule = new CurrentEnvModule();
 	        AttributeFinder attrFinder = new AttributeFinder();
-	        List attrModules = new ArrayList();
+	        List<CurrentEnvModule> attrModules = new ArrayList<CurrentEnvModule>();
 	        attrModules.add(envModule);
 	        attrFinder.setModules(attrModules);
 	        
@@ -103,9 +103,9 @@ public class RoleFilter implements Filter {
 	
 	        ResponseCtx XACMLresponse = pdp.evaluate(XACMLrequest);
 	        
-	        Set ris_set = XACMLresponse.getResults();
+	        Set<?> ris_set = XACMLresponse.getResults();
 	        Result ris = null;
-	        Iterator it = ris_set.iterator();
+	        Iterator<?> it = ris_set.iterator();
 	
 	        while (it.hasNext()) {
 	            ris = (Result) it.next();
