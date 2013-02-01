@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.security.auth.Subject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -55,7 +56,9 @@ public class LoginServlet extends HttpServlet {
 		JaasAuthentication jaasAuthentication= new JaasAuthentication(request.getParameter(UserMetaData.USERS_USERNAME), 
 				request.getParameter(UserMetaData.USERS_PASSWORD));
 		
-		Boolean esitoLogin = jaasAuthentication.tryLogin();
+		Subject subject = jaasAuthentication.tryLogin();
+		
+		boolean esitoLogin = true;
 		if(esitoLogin){
 			User loggedUser=new User();
 			loggedUser.setUsername(request.getParameter(UserMetaData.USERS_USERNAME));
