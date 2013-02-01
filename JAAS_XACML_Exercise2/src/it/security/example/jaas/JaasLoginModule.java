@@ -9,6 +9,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.crypto.BadPaddingException;
@@ -42,10 +43,7 @@ public class JaasLoginModule implements LoginModule {
 		return false;
 	}
 
-	public boolean commit() throws LoginException {
-		System.out.println("Login Module - commit called");
-		return succeeded;
-	}
+	
 
 	public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState,
 			Map<String, ?> options) {
@@ -55,14 +53,6 @@ public class JaasLoginModule implements LoginModule {
 		this.callbackHandler = callbackHandler;
 		this.sharedState = sharedState;
 		this.options = options;
-
-		System.out.println("dbUrl value: " + (String) options.get("dbUrl"));
-		System.out.println("dbUserName value: " + (String) options.get("dbUserName"));
-		System.out.println("dbDriver value: " + (String) options.get("dbDriver"));
-		System.out.println("userTable value: " + (String) options.get("userTable"));
-		System.out.println("userField value: " + (String) options.get("userField"));
-		System.out.println("credentialField value: " + (String) options.get("credentialField"));
-		System.out.println("userRoleRoleField value: " + (String) options.get("userRoleRoleField"));
 
 		succeeded = false;
 	}
@@ -96,9 +86,12 @@ public class JaasLoginModule implements LoginModule {
 			database = new MyDatabase(options);
 			database.createDatabaseConnection();
 			if(database.loginUser(loggedUser.getUsername(), loggedUser.getPassword())){
+				System.out.println("Il database ha tornato il valore");
 				succeeded=true;
 				}
 			else{
+				System.out.println("Il database non ha tornato il valore");
+
 				succeeded=false;
 			}
 		} catch (SQLException e) {
@@ -123,6 +116,18 @@ public class JaasLoginModule implements LoginModule {
 		
 		return succeeded;
 		
+	}
+	
+	public boolean commit() throws LoginException {
+		System.out.println("Login Module - commit called");
+		
+		ArrayList<JaasPrincipal> Principals = new ArrayList<JaasPrincipal>();
+		Principals.add(new JaasPrincipal(loggedUser.getRole()));
+		Principals.add(new JaasPrincipal((String) options.get("dbUrl")));
+		Principals.add(new JaasPrincipal((String) options.get("dbUserName")));
+		Principals.add(new JaasPrincipal((String) options.get("dbDriver")));
+		Principals.add(new JaasPrincipal((String) options.get("encryptKey")));
+		return succeeded;
 	}
 
 	public boolean logout() throws LoginException {
