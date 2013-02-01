@@ -45,7 +45,7 @@ public class MyDatabase {
 		 * EVITANDO IL PASSAGGIO ATTRAVERSO JAAS
 		 */
 		this.dbDriver="com.mysql.jdbc.Driver";
-		this.dbUrl="jdbc:mysql://localhost:3306/SDCS-DB";
+		this.dbUrl="jdbc:mysql://localhost:3306/SECURITY_DB";
 		this.dbUserName="root";
 		this.dbPassword="";
 		this.encryptKey="A2Xb2bBSc6DP1OJCQF7UeO9lpGt6ZfQSBqZ1K1NyqBc=";
@@ -432,6 +432,7 @@ public class MyDatabase {
 			InvalidKeySpecException,
 			UnsupportedEncodingException{
 		
+		System.out.println("La chiave utilizzata per CIFRARE e': "+ encryptKey);
 		byte[] key = encryptKey.getBytes("UTF-8");
 		MessageDigest sha = MessageDigest.getInstance("SHA-1");
 		key = sha.digest(key);
@@ -452,6 +453,7 @@ public class MyDatabase {
 			BadPaddingException,
 			InvalidKeySpecException,
 			UnsupportedEncodingException{
+		System.out.println("La chiave utilizzata per DECIFRARE e': "+ encryptKey);
 		byte[] key = encryptKey.getBytes("UTF-8");
 		MessageDigest sha = MessageDigest.getInstance("SHA-1");
 		key = sha.digest(key);

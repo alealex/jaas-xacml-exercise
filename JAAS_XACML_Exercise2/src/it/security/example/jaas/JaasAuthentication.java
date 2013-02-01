@@ -10,15 +10,12 @@ public class JaasAuthentication {
 	private String username;
 	private String password;
 
-	// PAKO
-//  private String CONFIG_FILE_PATH = "/home/giancarlo/Scrivania/authenticationjaas.config";
-	
 	// MARIO
-//	private String CONFIG_FILE_PATH = "/Users/mario_fio/Desktop/authenticationjaas.config";
+	private String CONFIG_FILE_PATH = "/Users/mario_fio/Desktop/authenticationjaas.config";
 	
 
 	// PAKO
-	private String CONFIG_FILE_PATH = "/Users/pasqualederosa/Desktop/authenticationjaas.config";
+//	private String CONFIG_FILE_PATH = "/Users/pasqualederosa/Desktop/authenticationjaas.config";
 
 	// GIANCARLO
 //	private String CONFIG_FILE_PATH = "/home/giancarlo/Scrivania/authenticationjaas.config";
@@ -41,11 +38,12 @@ public class JaasAuthentication {
 		
 		try {
 			//Instanzio il loginContext ed il callback handler
-			LoginContext lc = new LoginContext("JaasConfigureFile", new JaasCallBackHandler(username, password));
+			LoginContext lc = new LoginContext("JaasConfigureFile",
+					new JaasCallBackHandler(username, password));
 			//Chiamata per effettuare le operazioni di login
 			lc.login();
 			subject = (Subject) lc.getSubject();
-			System.out.println("Il subject e': "+lc.getSubject().toString());
+			System.out.println("Il subject Principals size e': "+lc.getSubject().getPrincipals().size());
 			isLogged = true;
 		} catch (LoginException e) {
 			System.out.println("Login exception");			
