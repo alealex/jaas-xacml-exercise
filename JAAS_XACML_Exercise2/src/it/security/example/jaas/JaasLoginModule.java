@@ -9,11 +9,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -31,16 +27,14 @@ public class JaasLoginModule implements LoginModule {
 
 	private Subject subject;
 	private CallbackHandler callbackHandler;
-	private Map sharedState;
-	private Map options;
+	private Map<String,?> sharedState;
+	private Map<String,?> options;
 	private User loggedUser;
 
-	private Vector<String> tempPrincipals;
 	private boolean succeeded = false;
 
 	public JaasLoginModule() {
 		System.out.println("Login Module - constructor called");
-		tempPrincipals  = new Vector<String>();
 	}
 
 	public boolean abort() throws LoginException {
@@ -50,15 +44,19 @@ public class JaasLoginModule implements LoginModule {
 
 	
 
-	public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState,
+	public void initialize(Subject subject,
+			CallbackHandler callbackHandler,
+			Map<String, ?> sharedState,
 			Map<String, ?> options) {
-
-		System.out.println("Login Module - initialize called");
+		System.out.println("Login Module - " +
+				"initialize called");
 		this.subject = subject;
 		this.callbackHandler = callbackHandler;
 		this.sharedState = sharedState;
 		this.options = options;
-
+		
+		System.out.println("SharedState: "+ this.sharedState.toString());
+		System.out.println("Options: "+ options.toString());
 		succeeded = false;
 	}
 
@@ -129,7 +127,6 @@ public class JaasLoginModule implements LoginModule {
 	
 	public boolean commit() throws LoginException {
 		System.out.println("Login Module - commit called");		
-		
 		/*
 		 * PRINT FOR DEBUG
 		 */
@@ -140,20 +137,50 @@ public class JaasLoginModule implements LoginModule {
 		System.out.println("COMMIT DB_ENCRYPT_KEY: "+(String) options.get("encryptKey"));
 		System.out.println("COMMIT DB_DRIVER: "+(String) options.get("dbDriver"));
 		/* ********************************* */
-
-		subject.getPrincipals().add(new JaasPrincipal(loggedUser.getRole()));
-		subject.getPrincipals().add(new JaasPrincipal((String) options.get("dbUrl")));
-		subject.getPrincipals().add(new JaasPrincipal((String) options.get("dbUserName")));
-		subject.getPrincipals().add(new JaasPrincipal((String) options.get("dbPassword")));
-		subject.getPrincipals().add(new JaasPrincipal((String) options.get("dbDriver")));
-		subject.getPrincipals().add(new JaasPrincipal((String) options.get("encryptKey")));
-		subject.getPrincipals().add(new JaasPrincipal(loggedUser.getUsername()));
+		
+		subject.getPrincipals().add(new JaasPrincipal(
+				loggedUser.getRole()));
+		subject.getPrincipals().add(new JaasPrincipal(
+				(String) options.get("dbUrl")));
+		subject.getPrincipals().add(new JaasPrincipal(
+				(String) options.get("dbUserName")));
+		subject.getPrincipals().add(new JaasPrincipal(
+				(String) options.get("dbPassword")));
+		subject.getPrincipals().add(new JaasPrincipal(
+				(String) options.get("dbDriver")));
+		subject.getPrincipals().add(new JaasPrincipal(
+				(String) options.get("encryptKey")));
+		subject.getPrincipals().add(new JaasPrincipal(
+				loggedUser.getUsername()));
 		return succeeded;
 	}
 
 	public boolean logout() throws LoginException {
 		System.out.println("Login Module - logout called");
-		return false;
+		
+		/*
+		 * Rimuovo tutti i Principals relativi all'utente:
+		 */
+		try{
+			subject.getPrincipals().remove(new JaasPrincipal(
+					loggedUser.getRole()));
+			subject.getPrincipals().remove(new JaasPrincipal(
+					(String) options.get("dbUrl")));
+			subject.getPrincipals().remove(new JaasPrincipal(
+					(String) options.get("dbUserName")));
+			subject.getPrincipals().remove(new JaasPrincipal(
+					(String) options.get("dbPassword")));
+			subject.getPrincipals().remove(new JaasPrincipal(
+					(String) options.get("dbDriver")));
+			subject.getPrincipals().remove(new JaasPrincipal(
+					(String) options.get("encryptKey")));
+			subject.getPrincipals().remove(new JaasPrincipal(
+					loggedUser.getUsername()));		
+			return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

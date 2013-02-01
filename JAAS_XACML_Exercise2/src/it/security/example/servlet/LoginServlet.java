@@ -16,7 +16,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -57,7 +56,8 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		JaasAuthentication jaasAuthentication= new JaasAuthentication(request.getParameter(UserMetaData.USERS_USERNAME), 
+		JaasAuthentication jaasAuthentication= new JaasAuthentication(
+				request.getParameter(UserMetaData.USERS_USERNAME), 
 				request.getParameter(UserMetaData.USERS_PASSWORD));
 		
 		 Subject subject = jaasAuthentication.tryLogin();
@@ -108,7 +108,8 @@ public class LoginServlet extends HttpServlet {
 					session.setAttribute(ProfessorMetaData.PROFESSORS_NUMBER, professor.getProfessor_Number());
 					session.setAttribute(ProfessorMetaData.PROFESSORS_SUBJECT, professor.getSubject());
 					session.setAttribute(UserMetaData.USERS_ROLE, RoleMetaData.ISPROFESSOR);					
-					response.sendRedirect(response.encodeRedirectUrl("/JAAS_XACML_Exercise2/professors/professors.jsp"));
+					session.setAttribute("LoginContext", JaasAuthentication.getLCinstance());
+					response.sendRedirect(response.encodeRedirectURL("/JAAS_XACML_Exercise2/professors/professors.jsp"));
 				}else if(loggedUser.getRole().toLowerCase().equals(RoleMetaData.ISSTUDENT)){
 					System.out.println("L'utente e' uno studente con USERNAME: " + loggedUser.getUsername());
 					Student student=new Student();
@@ -120,7 +121,8 @@ public class LoginServlet extends HttpServlet {
 					session.setAttribute(StudentMetaData.STUDENTS_NUMBER, student.getStudent_Number());
 					session.setAttribute(StudentMetaData.STUDENTS_DATE_OF_BIRTH, student.getDate_Of_Birth());			
 					session.setAttribute(UserMetaData.USERS_ROLE, RoleMetaData.ISSTUDENT);					
-					response.sendRedirect(response.encodeRedirectUrl("/JAAS_XACML_Exercise2/students/students.jsp"));
+					session.setAttribute("LoginContext", JaasAuthentication.getLCinstance());
+					response.sendRedirect(response.encodeRedirectURL("/JAAS_XACML_Exercise2/students/students.jsp"));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -143,7 +145,7 @@ public class LoginServlet extends HttpServlet {
 		}
 		else{
 			System.out.println("The username or the password are not correct. Please check your data and try again the login !!!");
-			response.sendRedirect(response.encodeRedirectUrl("/JAAS_XACML_Exercise2/public/login.jsp"));
+			response.sendRedirect(response.encodeRedirectURL("/JAAS_XACML_Exercise2/public/login.jsp"));
 		}
 	}
 

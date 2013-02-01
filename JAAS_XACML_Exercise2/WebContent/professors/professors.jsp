@@ -15,6 +15,7 @@ String username = (String) sessione.getAttribute("USERNAME");
 String date = (String) sessione.getAttribute("DATE_OF_BIRTH");
 String professorNumber = (String) sessione.getAttribute("PROFESSOR_NUMBER");
 String subject = (String) sessione.getAttribute("SUBJECT");
+Object LoginContext = (Object) sessione.getAttribute("LoginContext");
 
 %>
 <h2><i>Welcome <span style="color: black;"><%=nome %></span></i></h2>
@@ -25,6 +26,9 @@ String subject = (String) sessione.getAttribute("SUBJECT");
 <p> Your professorNumber is: <span style="color: black;"><%=professorNumber %></span> </p>
 <p> You teach the following subject: <span style="color: black;"><%=subject %></span> </p>
 <br>
-<h3><a href="<%=request.getContextPath()%>/public/logout.jsp">Logout</a></h3><br>
 
+<form name="logout" method="POST" action="http://localhost:8080/JAAS_XACML_Exercise2/LogoutServlet" >
+  <input type="submit" value="Logout">
+  <input type="hidden" name="LoginContext" value="<%=LoginContext%>"> <br>
+</form>
 </body></html>

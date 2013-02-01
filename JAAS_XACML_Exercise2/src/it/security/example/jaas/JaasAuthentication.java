@@ -9,6 +9,7 @@ public class JaasAuthentication {
 	
 	private String username;
 	private String password;
+	private static LoginContext lc;
 
 	// MARIO
 	private String CONFIG_FILE_PATH = "/Users/mario_fio/Desktop/authenticationjaas.config";
@@ -34,14 +35,16 @@ public class JaasAuthentication {
 		
 //		System.setProperty("java.security.auth.login.config", CONFIG_PATH
 //				+"JAAS_XACML_Exercise2/WebContent/jaasconfiguration/authenticationjaas.config");	
-		System.setProperty("java.security.auth.login.config", CONFIG_FILE_PATH);
 		
+		
+		System.setProperty("java.security.auth.login.config", CONFIG_FILE_PATH);
 		try {
 			//Instanzio il loginContext ed il callback handler
-			LoginContext lc = new LoginContext("JaasConfigureFile",
+			lc = new LoginContext("JaasConfigureFile",
 					new JaasCallBackHandler(username, password));
 			//Chiamata per effettuare le operazioni di login
 			lc.login();
+			
 			subject = (Subject) lc.getSubject();
 			System.out.println("Il subject Principals size e': "+lc.getSubject().getPrincipals().size());
 			isLogged = true;
@@ -53,5 +56,9 @@ public class JaasAuthentication {
 		
 		if (isLogged) return subject;
 		else return null;
+	}
+	
+	public static LoginContext getLCinstance(){
+		return lc;
 	}
 }
