@@ -56,7 +56,13 @@ public class JaasLoginModule implements LoginModule {
 		this.sharedState = sharedState;
 		this.options = options;
 
-		System.out.println("testOption value: " + (String) options.get("testOption"));
+		System.out.println("dbUrl value: " + (String) options.get("dbUrl"));
+		System.out.println("dbUserName value: " + (String) options.get("dbUserName"));
+		System.out.println("dbDriver value: " + (String) options.get("dbDriver"));
+		System.out.println("userTable value: " + (String) options.get("userTable"));
+		System.out.println("userField value: " + (String) options.get("userField"));
+		System.out.println("credentialField value: " + (String) options.get("credentialField"));
+		System.out.println("userRoleRoleField value: " + (String) options.get("userRoleRoleField"));
 
 		succeeded = false;
 	}
