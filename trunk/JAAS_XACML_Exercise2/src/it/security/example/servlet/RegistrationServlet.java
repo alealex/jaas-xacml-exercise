@@ -45,29 +45,17 @@ public class RegistrationServlet extends HttpServlet {
 		System.out.println("Parametri di registrazione inviati: ");
 		System.out.println("Memorizzo dati in db... ");
 		
-		PrintWriter pw = response.getWriter();
-		
-		
-		response.setContentType("TEXT/HTML");
-		pw.write("<HTML>");
-		pw.write("<HEAD>");
-		pw.write("<TITLE> Risposta Servlet Security </TITLE>");
-		pw.write("</HEAD>");
-		
-		pw.write("<BODY>");
-		
-		pw.write("<p align=\"left\">--------- STAMPA RICHIESTA DB ----------</p>");
-		
 		try {
-			pw.write("<p align=\"left\">RUOLO: "+ saveUserIntoDB(request) +"</p>");
+			saveUserIntoDB(request);
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		pw.write("</BODY>");
-		pw.write("</HTML>");
-		pw.close();
+		
+		response.sendRedirect(response.encodeRedirectURL("/JAAS_XACML_Exercise2/public/login.jsp"));
 	}
 	
 	public boolean saveUserIntoDB(HttpServletRequest request) throws SQLException, ClassNotFoundException{
