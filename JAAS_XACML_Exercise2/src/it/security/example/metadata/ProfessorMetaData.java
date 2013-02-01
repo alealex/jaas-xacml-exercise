@@ -10,4 +10,3 @@ public class ProfessorMetaData {
 	public static final String PROFESSORS_NUMBER ="PROFESSOR_NUMBER";
 	public static final String PROFESSORS_SUBJECT ="SUBJECT";	
 }
-

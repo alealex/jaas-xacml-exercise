@@ -52,7 +52,8 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		JaasAuthentication jaasAuthentication= new JaasAuthentication(request.getParameter(UserMetaData.USERS_USERNAME), request.getParameter(UserMetaData.USERS_PASSWORD));
+		JaasAuthentication jaasAuthentication= new JaasAuthentication(request.getParameter(UserMetaData.USERS_USERNAME), 
+				request.getParameter(UserMetaData.USERS_PASSWORD));
 		
 		Boolean esitoLogin = jaasAuthentication.tryLogin();
 		if(esitoLogin){

@@ -11,14 +11,16 @@ public class JaasAuthentication {
 
 	// PAKO
 //	private String CONFIG_PATH="/Users/pasqualederosa/Documents/workspaceSDCS/";
+//  private String CONFIG_FILE_PATH = "/home/giancarlo/Scrivania/authenticationjaas.config";
 
 	
 	// MARIO
 //	private String CONFIG_PATH="/Users/pasqualederosa/Documents/workspace-security/";
+//	private String CONFIG_FILE_PATH = "/home/giancarlo/Scrivania/authenticationjaas.config";
 	
 	//GIANCARLO
 	private String CONFIG_PATH="/home/giancarlo/Scrivania/Cioppy/Università/Magistrale/Applicazioni Telematiche/workspace2/";
-
+	private String CONFIG_FILE_PATH = "/home/giancarlo/Scrivania/authenticationjaas.config";
 
 	public JaasAuthentication(String username, String password){
 		this.username=username;
@@ -26,8 +28,9 @@ public class JaasAuthentication {
 	}
 	
 	public boolean tryLogin ( ) {
-		System.setProperty("java.security.auth.login.config", CONFIG_PATH
-				+"JAAS_XACML_Exercise2/WebContent/jaasconfiguration/authenticationjaas.config");			
+//		System.setProperty("java.security.auth.login.config", CONFIG_PATH
+//				+"JAAS_XACML_Exercise2/WebContent/jaasconfiguration/authenticationjaas.config");	
+		System.setProperty("java.security.auth.login.config", CONFIG_FILE_PATH);
 		
 		try {
 			//Instanzio il loginContext ed il callback handler
