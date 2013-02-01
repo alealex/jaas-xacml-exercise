@@ -41,9 +41,9 @@ public class RequestBuilder
             
    
     
-    public static Set setupSubjects(HttpServletRequest request ) throws URISyntaxException {
-        HashSet attributes = new HashSet();
-        HashSet subjects = new HashSet();
+    public static Set<Subject> setupSubjects(HttpServletRequest request ) throws URISyntaxException {
+        HashSet<Attribute> attributes = new HashSet<Attribute>();
+        HashSet<Subject> subjects = new HashSet<Subject>();
           
         HttpSession session=request.getSession();
        System.out.println("Il ruolo che setto nella richiesta e': "+(String)session.getAttribute(UserMetaData.USERS_ROLE));
@@ -73,8 +73,8 @@ public class RequestBuilder
      *
      * @throws URISyntaxException if there is a problem with a URI
      */
-    public static Set setupResource(HttpServletRequest request) throws URISyntaxException {
-        HashSet resource = new HashSet();
+    public static Set<Attribute> setupResource(HttpServletRequest request) throws URISyntaxException {
+        HashSet<Attribute> resource = new HashSet<Attribute>();
         
         // the resource being requested : è una URI ma passata come stringa
         StringAttribute value =
@@ -95,8 +95,8 @@ public class RequestBuilder
      *
      * @throws URISyntaxException if there is a problem with a URI
      */
-    public static Set setupAction() throws URISyntaxException {
-        HashSet action = new HashSet();
+    public static Set<Attribute> setupAction() throws URISyntaxException {
+        HashSet<Attribute> action = new HashSet<Attribute>();
 
         // this is a standard URI that can optionally be used to specify
         // the action being requested
@@ -113,7 +113,7 @@ public class RequestBuilder
     
     public static RequestCtx createXACMLRequest(HttpServletRequest request) throws Exception{
         
-      RequestCtx XACMLrequest = new RequestCtx(setupSubjects(request), setupResource(request),setupAction(), new HashSet());
+      RequestCtx XACMLrequest = new RequestCtx(setupSubjects(request), setupResource(request),setupAction(), new HashSet<Object>());
       
       return XACMLrequest;
     }
