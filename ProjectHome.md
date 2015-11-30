@@ -1,0 +1,1 @@
+This is a practical example to use JAAS for aithenticate users and XACML for authorization.
